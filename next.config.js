@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
-  reactStrictMode: true,
-}
+    reactStrictMode: true,
+    images: {
+        domains: ['ui-avatars.com', 'lh3.googleusercontent.com'],
+    },
+};
