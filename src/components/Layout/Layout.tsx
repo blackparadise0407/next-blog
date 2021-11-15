@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import clsx from 'clsx';
 
-import { Footer, Header } from 'components';
+import { Footer } from '../Footer';
+import { Header } from '../Header';
 
 import styles from './styles.module.css';
 
@@ -16,7 +17,7 @@ export default function Layout({ children }: Props) {
             <main
                 className={clsx(
                     styles.main,
-                    'px-2 py-4 xl:px-32 xl:py-6 bg-gray-100'
+                    'p-2 xl:px-32 xl:py-6 bg-gray-100'
                 )}
             >
                 {children}

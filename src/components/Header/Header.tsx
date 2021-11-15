@@ -1,11 +1,14 @@
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import { User } from '@firebase/auth';
 
-import { Avatar, Button, Input } from 'components';
 import { useAuthContext } from 'contexts/auth';
 
 import styles from './styles.module.css';
+import { Avatar } from 'components/Avatar';
+import { Input } from 'components/Input';
+import { Button } from 'components/Button';
 
 type Props = {};
 
@@ -79,7 +82,7 @@ export default function Header({}: Props) {
             )}
         >
             <div className="font-bold text-blue-600 text-2xl uppercase tracking-wider">
-                Prism
+                <Link href="/">Prism</Link>
             </div>
             <Input
                 className="ml-5 w-96 hidden md:block"
