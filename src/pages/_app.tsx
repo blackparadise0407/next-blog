@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 
 import { Layout } from '@/components/Layout';
 import { AuthProvider } from '@/contexts/auth';
+import { ToastProvider } from '@/contexts/toast';
 
 import 'tailwindcss/tailwind.css';
 import '../styles/globals.css';
@@ -10,11 +11,13 @@ import '../styles/variables.css';
 
 function BlogApp({ Component, pageProps }: AppProps) {
     return (
-        <AuthProvider>
-            <Layout>
-                <Component {...pageProps} />
-            </Layout>
-        </AuthProvider>
+        <ToastProvider>
+            <AuthProvider>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
+            </AuthProvider>
+        </ToastProvider>
     );
 }
 

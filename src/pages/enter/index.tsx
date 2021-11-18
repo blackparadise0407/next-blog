@@ -1,25 +1,21 @@
 import Link from 'next/link';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import { AiOutlineGithub, AiOutlineGoogle } from 'react-icons/ai';
 
-import { Button, Input, Label } from 'components';
 import { useAuthContext } from 'contexts/auth';
-import { useEffect } from 'react';
-import { NextPageContext } from 'next';
+import { Button } from '@/components/Button';
+import { Label } from '@/components/Label';
+import { Input } from '@/components/Input';
 
 type Props = {};
 
 export default function EnterPage({}: Props) {
     const router = useRouter();
     const { state } = router.query;
-    const {
-        isAuth,
-        loading,
-        error,
-        handleEmailPasswordSignIn,
-        handleExternalLogin,
-    } = useAuthContext();
+    const { isAuth, loading, handleEmailPasswordSignIn, handleExternalLogin } =
+        useAuthContext();
 
     const { values, handleChange, handleSubmit } = useFormik({
         initialValues: {

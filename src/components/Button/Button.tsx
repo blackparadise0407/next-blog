@@ -40,7 +40,7 @@ const getButtonSize = (size: ButtonSize) => {
         case 'small':
             return 'text-xs sm:text-sm px-3 xl:px-3 py-1';
         case 'middle':
-            return 'text-xs sm:text-sm px-3 xl:px-4 py-1.5';
+            return 'text-xs sm:text-sm px-3 xl:px-4 py-2';
         case 'large':
             return 'text-xs sm:text-sm md:text-base px-4 xl:px-6 py-2.5';
         default:
@@ -73,7 +73,8 @@ function Button({
                 getColorFromType(type),
                 'flex text-center items-center font-normal rounded-md transition-colors',
                 className,
-                block && 'w-full'
+                block && 'w-full',
+                loading && '!opacity-90 pointer-events-none'
             )}
         >
             <div className="flex-grow"></div>

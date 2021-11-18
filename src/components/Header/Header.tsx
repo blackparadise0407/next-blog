@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import { User } from '@firebase/auth';
+import { getAuth, User } from '@firebase/auth';
 
 import { useAuthContext } from 'contexts/auth';
 
@@ -9,10 +9,16 @@ import styles from './styles.module.css';
 import { Avatar } from 'components/Avatar';
 import { Input } from 'components/Input';
 import { Button } from 'components/Button';
+import firebase from 'utils/firebase';
+
+const auth = getAuth(firebase);
 
 type Props = {};
 
-function _renderUser(user: User | undefined): JSX.Element | null {
+function _renderUser(
+    user: User | undefined,
+    handleSignOut: () => void
+): JSX.Element | null {
     if (!user) return null;
     return (
         <div>
@@ -48,7 +54,10 @@ function _renderUser(user: User | undefined): JSX.Element | null {
                             Setting
                         </li>
                         <hr />
-                        <li className="hover:bg-gray-100 transition-colors hover:text-blue-500 rounded-md cursor-pointer px-4 py-2.5">
+                        <li
+                            className="hover:bg-gray-100 transition-colors hover:text-blue-500 rounded-md cursor-pointer px-4 py-2.5"
+                            onClick={handleSignOut}
+                        >
                             Sign Out
                         </li>
                     </ul>
@@ -60,7 +69,7 @@ function _renderUser(user: User | undefined): JSX.Element | null {
 
 export default function Header({}: Props) {
     const router = useRouter();
-    const { isAuth, user } = useAuthContext();
+    const { isAuth, user, handleSignOut } = useAuthContext();
 
     const handleGoToLogin = () => {
         router.push('/enter');
@@ -91,7 +100,7 @@ export default function Header({}: Props) {
             <div className="flex-grow"></div>
             <ul className="space-x-2 xl:space-x-5 flex">
                 {isAuth ? (
-                    _renderUser(user)
+                    _renderUser(user, handleSignOut)
                 ) : (
                     <>
                         <Button onClick={handleGoToLogin} type="ghost">

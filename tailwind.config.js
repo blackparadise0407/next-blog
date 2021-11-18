@@ -9,6 +9,32 @@ module.exports = {
                     '0%': { opacity: 0 },
                     '100%': { opacity: 1 },
                 },
+                'slide-in': {
+                    '0%': {
+                        transform: 'translateX(300px)',
+                        'animation-timing-function':
+                            'cubic-bezier(.01,1.75,.65,.81)',
+                    },
+                    '100%': {
+                        transform: 'translateX(0)',
+                        'animation-timing-function':
+                            'cubic-bezier(.01,1.75,.65,.81)',
+                    },
+                },
+                'slide-out': {
+                    '0%': {
+                        transform: 'translateX(0)',
+                        opacity: 1,
+                        'animation-timing-function':
+                            'cubic-bezier(.62,-0.37,0,.65)',
+                    },
+                    '100%': {
+                        transform: 'translateX(320px)',
+                        opacity: 0.5,
+                        'animation-timing-function':
+                            'cubic-bezier(.62,-0.37,0,.65)',
+                    },
+                },
                 wiggle: {
                     '0%, 100%': { transform: 'rotate(-3deg)' },
                     '50%': { transform: 'rotate(3deg)' },
@@ -17,6 +43,8 @@ module.exports = {
             animation: {
                 appear: 'appear 0.2s ease-in-out forwards',
                 wiggle: 'wiggle 1s ease-in-out infinite',
+                'slide-in': 'slide-in 0.3s ease-in forwards',
+                'slide-out': 'slide-out 0.3s ease-in forwards',
             },
         },
     },

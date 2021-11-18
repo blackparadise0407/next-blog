@@ -1,6 +1,7 @@
 import {
     createContext,
     ReactNode,
+    useCallback,
     useContext,
     useEffect,
     useState,
@@ -17,14 +18,16 @@ import Cookies from 'js-cookie';
 
 import firebase from 'utils/firebase';
 import { google, github } from 'utils/providers';
+import { useToast } from './toast';
+import { useRouter } from 'next/router';
 
 const initialState: IAuthContext = {
     loading: false,
     user: undefined,
-    error: undefined,
     isAuth: false,
     handleEmailPasswordSignIn: () => {},
     handleExternalLogin: () => {},
+    handleSignOut: () => {},
 };
 
 const auth = getAuth(firebase);
@@ -37,35 +40,35 @@ type AuthProviderProps = {
 
 export function AuthProvider({ children }: AuthProviderProps) {
     const [state, setState] = useState<IAuthContext>(initialState);
+    const router = useRouter();
+    const { enqueue } = useToast();
 
-    const handleEmailPasswordSignIn = ({
-        username,
-        password,
-    }: {
-        username: string;
-        password: string;
-    }) => {
-        setState({ ...state, loading: true });
-        signInWithEmailAndPassword(auth, username, password)
-            .then((userCredential: UserCredential) => {
-                const user = userCredential.user;
-                user.getIdToken()
-                    .then((res) => Cookies.set('accessToken', res))
-                    .catch((_) => {});
+    const handleEmailPasswordSignIn = useCallback(
+        ({ username, password }: { username: string; password: string }) => {
+            setState({ ...state, loading: true });
+            signInWithEmailAndPassword(auth, username, password)
+                .then((userCredential: UserCredential) => {
+                    const user = userCredential.user;
+                    user.getIdToken()
+                        .then((res) => Cookies.set('accessToken', res))
+                        .catch((_) => {});
 
-                setState({ ...state, loading: false, user, isAuth: true });
-            })
-            .catch((error: FirebaseError) => {
-                setState({
-                    ...state,
-                    loading: false,
-                    error: error.message,
-                    isAuth: false,
+                    setState({ ...state, loading: false, user, isAuth: true });
+                })
+                .catch(() => {
+                    enqueue('Wrong username or password', { variant: 'error' });
+                    setState({
+                        ...state,
+                        loading: false,
+                        isAuth: false,
+                    });
                 });
-            });
-    };
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        []
+    );
 
-    const handleExternalLogin = (type: 'google' | 'github') => {
+    const handleExternalLogin = useCallback((type: 'google' | 'github') => {
         const provider = type === 'google' ? google : github;
         setState({ ...state, loading: true });
         signInWithPopup(auth, provider)
@@ -76,17 +79,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     .catch((_) => {});
                 setState({ ...state, loading: false, user, isAuth: true });
             })
-            .catch((error: FirebaseError) => {
+            .catch(() => {
                 setState({
                     ...state,
                     loading: false,
-                    error: error.message,
                     isAuth: false,
                 });
             });
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const loadCurrentUser = () => {
+    const loadCurrentUser = useCallback(() => {
         auth.onAuthStateChanged(
             (user) => {
                 if (!!user) {
@@ -106,16 +109,44 @@ export function AuthProvider({ children }: AuthProviderProps) {
                     }
                 }
             },
-            (err) => {
+            () => {
+                enqueue('Unexpected error happened', { variant: 'error' });
                 setState({
                     ...state,
                     user: undefined,
                     isAuth: false,
-                    error: err.message,
                 });
             }
         );
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleSignOut = useCallback(() => {
+        setState({ ...state, loading: true });
+        auth.signOut().then(
+            () => {
+                sessionStorage.removeItem('user');
+                setState({
+                    ...state,
+                    isAuth: false,
+                    user: undefined,
+                    loading: false,
+                });
+                enqueue('Sign out success', { variant: 'success' });
+                router.push('/');
+            },
+            () => {
+                enqueue('Unexpected error happened', { variant: 'error' });
+                setState({
+                    ...state,
+                    isAuth: false,
+                    user: undefined,
+                    loading: false,
+                });
+            }
+        );
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     useEffect(() => {
         setState((prev) => ({
@@ -126,6 +157,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                 ...JSON.parse(sessionStorage.getItem('user') || '{}'),
             },
         }));
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -135,7 +167,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     return (
         <AuthContext.Provider
-            value={{ ...state, handleEmailPasswordSignIn, handleExternalLogin }}
+            value={{
+                ...state,
+                handleEmailPasswordSignIn,
+                handleExternalLogin,
+                handleSignOut,
+            }}
         >
             {children}
         </AuthContext.Provider>
