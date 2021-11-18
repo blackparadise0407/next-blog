@@ -26,13 +26,13 @@ module.exports = {
                         transform: 'translateX(0)',
                         opacity: 1,
                         'animation-timing-function':
-                            'cubic-bezier(.62,-0.37,0,.65)',
+                            'cubic-bezier(1,-0.81,0,.81)',
                     },
                     '100%': {
-                        transform: 'translateX(320px)',
+                        transform: 'translateX(300px)',
                         opacity: 0.5,
                         'animation-timing-function':
-                            'cubic-bezier(.62,-0.37,0,.65)',
+                            'cubic-bezier(1,-0.81,0,.81)',
                     },
                 },
                 wiggle: {

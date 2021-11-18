@@ -8,6 +8,7 @@ import { useAuthContext } from 'contexts/auth';
 import { Button } from '@/components/Button';
 import { Label } from '@/components/Label';
 import { Input } from '@/components/Input';
+import { useToast } from '@/contexts/toast';
 
 type Props = {};
 
@@ -16,6 +17,7 @@ export default function EnterPage({}: Props) {
     const { state } = router.query;
     const { isAuth, loading, handleEmailPasswordSignIn, handleExternalLogin } =
         useAuthContext();
+    const { enqueue } = useToast();
 
     const { values, handleChange, handleSubmit } = useFormik({
         initialValues: {
@@ -24,7 +26,14 @@ export default function EnterPage({}: Props) {
         },
         onSubmit: (values) => {
             const { username, password } = values;
-            handleEmailPasswordSignIn({ username, password });
+            if (!username || !password) {
+                enqueue('Username and password are required!', {
+                    variant: 'error',
+                    title: 'Error',
+                });
+            } else {
+                handleEmailPasswordSignIn({ username, password });
+            }
         },
     });
 

@@ -86,7 +86,7 @@ function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
             if (!!autoClose) {
                 setClassN('animate-slide-out');
             }
-        }, +autoClose - 400);
+        }, +autoClose - 600);
         return () => {
             clearInterval(interval);
             clearInterval(_interval);
@@ -98,7 +98,7 @@ function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
         setClassN('animate-slide-out');
         setTimeout(() => {
             onDelete(id);
-        }, 400);
+        }, 600);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -108,7 +108,7 @@ function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
         <div
             key={id}
             className={clsx(
-                'relative flex items-center px-6 py-3 shadow-lg rounded-md max-w-xs w-72',
+                'relative flex items-center pl-4 pr-6 py-3 shadow-lg rounded-md max-w-xs w-72',
                 classN && classN,
                 getClassFromVariant(variant).body
             )}
@@ -118,7 +118,7 @@ function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
                 {title && (
                     <span
                         className={clsx(
-                            'text-base font-medium mb-2',
+                            'text-base font-medium',
                             getClassFromVariant(variant).title
                         )}
                     >

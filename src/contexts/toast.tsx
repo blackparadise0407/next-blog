@@ -1,13 +1,12 @@
-import { ToastItem } from '@/components/ToastItem';
 import {
     createContext,
     ReactNode,
     useCallback,
     useContext,
-    useEffect,
     useState,
 } from 'react';
-import { AiOutlineClose } from 'react-icons/ai';
+
+import { ToastItem } from '@/components/ToastItem';
 
 const initialState: IToastContext = {
     items: [],
@@ -36,7 +35,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
         });
     }, []);
 
-    const handleDeleteToast = (id: string) => {
+    const _handleDeleteToast = useCallback((id: string) => {
         setItems((prev) => {
             const foundIndex = prev.findIndex((i) => i.id === id);
             if (foundIndex > -1) {
@@ -45,17 +44,18 @@ export function ToastProvider({ children }: ToastProviderProps) {
                 return clone;
             } else return prev;
         });
-    };
+    }, []);
 
     return (
         <ToastContext.Provider value={{ items, enqueue }}>
             {!!items.length && (
-                <div className="fixed top-2 right-2 z-50 space-y-2">
+                <div className="fixed top-2 right-2 z-50 space-y-4">
                     {items.map((i) => (
                         <ToastItem
+                            autoClose={4000}
                             key={i.id}
                             data={i}
-                            onDelete={handleDeleteToast}
+                            onDelete={_handleDeleteToast}
                         />
                     ))}
                 </div>
