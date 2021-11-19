@@ -21,15 +21,15 @@ type ButtonProps = {
 const getColorFromType = (type: ButtonType) => {
     switch (type) {
         case 'primary':
-            return 'bg-blue-600 text-white hover:bg-blue-700';
+            return 'bg-blue-600 text-white hover:bg-blue-700 focus:bg-blue-500';
         case 'secondary':
-            return 'bg-blue-300 text-white hover:bg-blue-400';
+            return 'bg-blue-400 text-white hover:bg-blue-600 focus:bg-blue-300';
         case 'default':
-            return 'bg-gray-200 text-black hover:bg-gray-300';
+            return 'bg-white text-black hover:bg-gray-50 !border-gray-300 focus:text-blue-400 focus:!border-blue-400';
         case 'danger':
-            return 'bg-red-500 text-white hover:bg-red-600';
+            return 'bg-red-500 text-white hover:bg-red-600 focus:bg-red-400';
         case 'ghost':
-            return 'bg-white text-black hover:bg-gray-100 hover:underline';
+            return 'bg-white text-black hover:bg-gray-100 focus:bg-gray-100';
         default:
             return '';
     }
@@ -71,7 +71,7 @@ function Button({
             className={clsx(
                 getButtonSize(size),
                 getColorFromType(type),
-                'flex text-center items-center font-normal rounded-md transition-colors',
+                'flex my-2 text-center items-center font-normal md:font-medium rounded-md transition-colors border border-transparent outline-none',
                 className,
                 block && 'w-full',
                 loading && '!opacity-90 pointer-events-none'

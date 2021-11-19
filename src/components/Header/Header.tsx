@@ -10,6 +10,7 @@ import { Avatar } from 'components/Avatar';
 import { Input } from 'components/Input';
 import { Button } from 'components/Button';
 import firebase from 'utils/firebase';
+import { get } from 'lodash';
 
 const auth = getAuth(firebase);
 
@@ -25,7 +26,7 @@ function _renderUser(
             <div className="relative">
                 <Avatar
                     className={styles.avatar}
-                    url={user?.photoURL}
+                    url={get(user, 'photoURL', '')}
                     size={35}
                 />
                 <div
@@ -37,7 +38,7 @@ function _renderUser(
                     <ul className="space-y-2 text-xs md:text-sm">
                         <div className="flex flex-col px-4 py-2 transition-colors hover:bg-gray-100 cursor-pointer rounded-md">
                             <span className="text-sm truncate text-black font-medium">
-                                {user?.displayName}
+                                {get(user, 'displayName', '')}
                             </span>
                             <span className="text-xs truncate text-gray-400">
                                 {user?.email}

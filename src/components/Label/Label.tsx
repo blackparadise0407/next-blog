@@ -9,7 +9,7 @@ type Props = {
 
 export default function Label({ className = '', name, children }: Props) {
     return (
-        <div className={clsx(className)}>
+        <div className={clsx('text-xs md:text-sm', className)}>
             <label>{name}</label>
             <div className="my-2">{children}</div>
         </div>

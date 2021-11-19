@@ -12,7 +12,8 @@ declare global {
             username: string;
             password: string;
         }) => void;
-        handleExternalLogin: (type: 'google' | 'github') => void;
+        handleExternalSignIn: (type: 'google' | 'github') => void;
+        handleSendPasswordResetEmail: (email: string) => void;
         handleSignOut: () => void;
     }
 
@@ -29,12 +30,13 @@ declare global {
     }
 
     interface IToastItem extends Omit<IToastOptions, 'title'> {
-        id: string;
+        uid: string;
         title?: string;
         description: string;
     }
 
     interface IBlog {
+        uid: string;
         thumbnail: string;
         title: string;
         tags: Array<ITag>;

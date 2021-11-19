@@ -10,7 +10,7 @@ type AvatarProps = {
 export default function Avatar({
     className = '',
     size = 35,
-    url = 'https://ui-avatars.com/api/?name=&background=0D8ABC&color=fff',
+    url,
 }: AvatarProps) {
     return (
         <div
@@ -23,7 +23,15 @@ export default function Avatar({
                 height: `${size}px`,
             }}
         >
-            <Image src={url} width={size} height={size} alt="user-avatar" />
+            <Image
+                src={
+                    url ||
+                    'https://ui-avatars.com/api/?name=&background=0D8ABC&color=fff'
+                }
+                width={size}
+                height={size}
+                alt="user-avatar"
+            />
         </div>
     );
 }

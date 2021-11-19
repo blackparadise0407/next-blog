@@ -11,9 +11,9 @@ import {
     signInWithEmailAndPassword,
     signInWithPopup,
     UserCredential,
-    User,
+    sendPasswordResetEmail,
+    updateProfile,
 } from 'firebase/auth';
-import { FirebaseError } from '@firebase/util';
 import Cookies from 'js-cookie';
 
 import firebase from 'utils/firebase';
@@ -26,8 +26,9 @@ const initialState: IAuthContext = {
     user: undefined,
     isAuth: false,
     handleEmailPasswordSignIn: () => {},
-    handleExternalLogin: () => {},
+    handleExternalSignIn: () => {},
     handleSignOut: () => {},
+    handleSendPasswordResetEmail: () => {},
 };
 
 const auth = getAuth(firebase);
@@ -68,7 +69,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         []
     );
 
-    const handleExternalLogin = useCallback((type: 'google' | 'github') => {
+    const handleExternalSignIn = useCallback((type: 'google' | 'github') => {
         const provider = type === 'google' ? google : github;
         setState({ ...state, loading: true });
         signInWithPopup(auth, provider)
@@ -148,6 +149,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    const handleSendPasswordResetEmail = useCallback((email: string) => {
+        setState({ ...state, loading: true });
+        sendPasswordResetEmail(auth, email)
+            .then(() => {
+                enqueue('An instruction has been sent to your email address', {
+                    variant: 'success',
+                });
+                setState({ ...state, loading: false });
+            })
+            .catch(() => {
+                enqueue('Email does not exists', {
+                    variant: 'error',
+                });
+                setState({ ...state, loading: false });
+            });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     useEffect(() => {
         setState((prev) => ({
             ...prev,
@@ -170,8 +189,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
             value={{
                 ...state,
                 handleEmailPasswordSignIn,
-                handleExternalLogin,
+                handleExternalSignIn,
                 handleSignOut,
+                handleSendPasswordResetEmail,
             }}
         >
             {children}

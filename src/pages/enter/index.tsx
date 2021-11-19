@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { AiOutlineGithub, AiOutlineGoogle } from 'react-icons/ai';
 
@@ -15,7 +15,7 @@ type Props = {};
 export default function EnterPage({}: Props) {
     const router = useRouter();
     const { state } = router.query;
-    const { isAuth, loading, handleEmailPasswordSignIn, handleExternalLogin } =
+    const { isAuth, loading, handleEmailPasswordSignIn, handleExternalSignIn } =
         useAuthContext();
     const { enqueue } = useToast();
 
@@ -39,15 +39,15 @@ export default function EnterPage({}: Props) {
 
     useEffect(() => {
         if (isAuth) {
-            router.push('/');
+            router.replace('/');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuth]);
 
     return (
         <div className="flex items-center justify-center">
-            <div className="bg-white rounded-md border px-4 sm:px-8 md:px-12 py-8 md:py-10 flex flex-col">
-                <div className="text-2xl font-bold text-center tracking-normal mb-5">
+            <div className="w-[512px] bg-white rounded-md border px-4 sm:px-8 md:px-12 py-8 flex flex-col">
+                <div className="text-base md:text-xl text-center font-bold tracking-normal mb-5">
                     Welcome to Blog community
                 </div>
                 <div className="space-y-2">
@@ -57,7 +57,7 @@ export default function EnterPage({}: Props) {
                         icon={<AiOutlineGoogle size={20} />}
                         type="primary"
                         className="!bg-black hover:!bg-gray-800"
-                        onClick={() => handleExternalLogin('google')}
+                        onClick={() => handleExternalSignIn('google')}
                     >
                         Sign in with your Google account
                     </Button>
@@ -67,7 +67,7 @@ export default function EnterPage({}: Props) {
                         size="large"
                         icon={<AiOutlineGithub size={20} />}
                         type="primary"
-                        onClick={() => handleExternalLogin('github')}
+                        onClick={() => handleExternalSignIn('github')}
                     >
                         Sign in with your Github account
                     </Button>
@@ -109,7 +109,7 @@ export default function EnterPage({}: Props) {
                             Continue
                         </Button>
                         <p className="text-xs text-blue-600 text-center">
-                            <Link href="/forgot-password">
+                            <Link href="/users/password/new">
                                 I forgot my password
                             </Link>
                         </p>

@@ -1,4 +1,4 @@
-import { memo } from 'react';
+import { HTMLProps, memo } from 'react';
 import clsx from 'clsx';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 
@@ -7,11 +7,9 @@ import { useTrigger } from 'hooks';
 type InputType = 'text' | 'password';
 
 type InputProps = {
-    className?: string;
     type?: InputType;
     bordered?: boolean;
-    [key: string]: any;
-};
+} & Omit<HTMLProps<HTMLInputElement>, 'type'>;
 
 function Input({
     className,

@@ -73,13 +73,13 @@ const getClassFromVariant = (
 };
 
 function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
-    const { id, title = '', description, variant = 'info' } = data;
+    const { uid, title = '', description, variant = 'info' } = data;
     const [classN, setClassN] = useState('animate-slide-in');
 
     useEffect(() => {
         const interval = setInterval(() => {
             if (!!autoClose) {
-                onDelete(id);
+                onDelete(uid);
             }
         }, autoClose);
         const _interval = setInterval(() => {
@@ -97,7 +97,7 @@ function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
     const handleDelete = useCallback(() => {
         setClassN('animate-slide-out');
         setTimeout(() => {
-            onDelete(id);
+            onDelete(uid);
         }, 600);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -106,7 +106,7 @@ function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
 
     return (
         <div
-            key={id}
+            key={uid}
             className={clsx(
                 'relative flex items-center pl-4 pr-6 py-3 shadow-lg rounded-md max-w-xs w-72',
                 classN && classN,

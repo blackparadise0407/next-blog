@@ -8,7 +8,7 @@ type BlogCardProps = {
 
 export default function BlogCard({ data }: BlogCardProps) {
     return (
-        <div className="w-full p-3 md:p-6 bg-white rounded-md border-gray-300 border">
+        <div className="w-full p-3 md:p-6 bg-white rounded-md border-gray-200 border">
             <div className="flex text-xs md:text-sm">
                 <Avatar size={40} />
                 <div className="flex flex-col ml-2">
@@ -23,7 +23,7 @@ export default function BlogCard({ data }: BlogCardProps) {
                 </div>
             </div>
             <div className="pl-0 md:pl-[48px]">
-                <div className="py-3 truncate">
+                <div className="py-3">
                     <span className="text-lg md:text-xl font-bold  hover:text-blue-600">
                         <Link href="/title/hahaha">
                             How To: Build A Simple Search Bar in JavaScript

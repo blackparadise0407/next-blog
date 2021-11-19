@@ -8,13 +8,13 @@ import {
 
 import { ToastItem } from '@/components/ToastItem';
 
+type ToastProviderProps = {
+    children: ReactNode | JSX.Element;
+};
+
 const initialState: IToastContext = {
     items: [],
     enqueue: () => {},
-};
-
-type ToastProviderProps = {
-    children: ReactNode | JSX.Element;
 };
 
 const ToastContext = createContext<IToastContext>(initialState);
@@ -26,7 +26,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
         setItems((prev) => {
             const clone = [...prev];
             clone.push({
-                id: new Date().getTime().toString(),
+                uid: new Date().getTime().toString(),
                 title: opts.title,
                 description: message,
                 variant: opts.variant,
@@ -35,9 +35,9 @@ export function ToastProvider({ children }: ToastProviderProps) {
         });
     }, []);
 
-    const _handleDeleteToast = useCallback((id: string) => {
+    const _handleDeleteToast = useCallback((uid: string) => {
         setItems((prev) => {
-            const foundIndex = prev.findIndex((i) => i.id === id);
+            const foundIndex = prev.findIndex((i) => i.uid === uid);
             if (foundIndex > -1) {
                 const clone = [...prev];
                 clone.splice(foundIndex, 1);
@@ -53,7 +53,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
                     {items.map((i) => (
                         <ToastItem
                             autoClose={4000}
-                            key={i.id}
+                            key={i.uid}
                             data={i}
                             onDelete={_handleDeleteToast}
                         />
