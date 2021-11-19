@@ -8,7 +8,7 @@ import { Label } from '@/components/Label';
 import { useToast } from '@/contexts/toast';
 import { useAuthContext } from '@/contexts/auth';
 
-export default function ForgotPasswordPage() {
+const ForgotPasswordPage: PrismPage = () => {
     const router = useRouter();
     const { enqueue } = useToast();
     const { isAuth, loading, handleSendPasswordResetEmail } = useAuthContext();
@@ -62,4 +62,8 @@ export default function ForgotPasswordPage() {
             </div>
         </div>
     );
-}
+};
+
+ForgotPasswordPage.layout = 'common';
+
+export default ForgotPasswordPage;

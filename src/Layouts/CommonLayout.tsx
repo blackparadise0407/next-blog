@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import clsx from 'clsx';
 
-import { Footer } from '../Footer';
-import { Header } from '../Header';
+import { Footer } from '../components/Footer';
+import { Header } from '../components/Header';
 
 import styles from './styles.module.css';
 

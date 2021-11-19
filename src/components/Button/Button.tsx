@@ -71,7 +71,7 @@ function Button({
             className={clsx(
                 getButtonSize(size),
                 getColorFromType(type),
-                'flex my-2 text-center items-center font-normal md:font-medium rounded-md transition-colors border border-transparent outline-none',
+                'flex text-center items-center font-normal md:font-medium rounded-md transition-colors border border-transparent outline-none',
                 className,
                 block && 'w-full',
                 loading && '!opacity-90 pointer-events-none'

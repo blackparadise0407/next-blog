@@ -1,8 +1,12 @@
 import { useRouter } from 'next/router';
 
-export default function UserPage() {
+const UserPage: PrismPage = () => {
     const router = useRouter();
     const { username } = router.query;
 
-    return <p>Post: {username}</p>;
-}
+    return <p>Username: {username}</p>;
+};
+
+UserPage.layout = 'common';
+
+export default UserPage;

@@ -12,7 +12,7 @@ import { useToast } from '@/contexts/toast';
 
 type Props = {};
 
-export default function EnterPage({}: Props) {
+const EnterPage: PrismPage = ({}: Props) => {
     const router = useRouter();
     const { state } = router.query;
     const { isAuth, loading, handleEmailPasswordSignIn, handleExternalSignIn } =
@@ -118,4 +118,8 @@ export default function EnterPage({}: Props) {
             </div>
         </div>
     );
-}
+};
+
+EnterPage.layout = 'common';
+
+export default EnterPage;

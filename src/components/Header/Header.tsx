@@ -1,18 +1,18 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useCallback } from 'react';
 import clsx from 'clsx';
-import { getAuth, User } from '@firebase/auth';
-
-import { useAuthContext } from 'contexts/auth';
-
-import styles from './styles.module.css';
-import { Avatar } from 'components/Avatar';
-import { Input } from 'components/Input';
-import { Button } from 'components/Button';
-import firebase from 'utils/firebase';
+import { User } from '@firebase/auth';
 import { get } from 'lodash';
 
-const auth = getAuth(firebase);
+import firebase from 'utils/firebase';
+import { useAuthContext } from 'contexts/auth';
+import { Avatar } from 'components/Avatar';
+import { Button } from 'components/Button';
+import { Input } from 'components/Input';
+
+import styles from './styles.module.css';
+import { Logo } from '../Logo';
 
 type Props = {};
 
@@ -72,17 +72,24 @@ export default function Header({}: Props) {
     const router = useRouter();
     const { isAuth, user, handleSignOut } = useAuthContext();
 
-    const handleGoToLogin = () => {
+    const handleGoToLogin = useCallback(() => {
         router.push('/enter');
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const handleGoToSignUp = () => {
+    const handleGoToSignUp = useCallback(() => {
         router.push('/enter?state=new-user', {
             query: {
                 state: 'new-user',
             },
         });
-    };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const handleGoToCreateBlog = useCallback(() => {
+        router.push('/new');
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <div
@@ -91,9 +98,7 @@ export default function Header({}: Props) {
                 'w-full bg-white shadow-sm border-b px-2 xl:px-32 flex items-center'
             )}
         >
-            <div className="font-bold text-blue-600 text-2xl uppercase tracking-wider">
-                <Link href="/">Prism</Link>
-            </div>
+            <Logo />
             <Input
                 className="ml-5 w-96 hidden md:block"
                 placeholder="Search..."
@@ -101,7 +106,12 @@ export default function Header({}: Props) {
             <div className="flex-grow"></div>
             <ul className="space-x-2 xl:space-x-5 flex">
                 {isAuth ? (
-                    _renderUser(user, handleSignOut)
+                    <div className="flex items-center space-x-5">
+                        <Button onClick={handleGoToCreateBlog} type="primary">
+                            Create Post
+                        </Button>
+                        {_renderUser(user, handleSignOut)}
+                    </div>
                 ) : (
                     <>
                         <Button onClick={handleGoToLogin} type="ghost">

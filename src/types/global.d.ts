@@ -1,6 +1,16 @@
 import { User } from '@firebase/auth';
+import { NextPage } from 'next';
+import { AppProps } from 'next/app';
 
 declare global {
+    type PrismAppProps = Omit<AppProps, 'Component'> & {
+        Component: PrismPage;
+    };
+
+    type PrismPage = NextPage & {
+        layout?: 'common' | 'article' | undefined;
+        isPrivate?: boolean | undefined;
+    };
     interface IAuthContext {
         user: User | undefined;
         isAuth: boolean;
@@ -48,5 +58,6 @@ declare global {
     interface ITag {
         uid: string;
         name: string;
+        description: string;
     }
 }
