@@ -1,5 +1,3 @@
-import { AiFillEye } from 'react-icons/ai';
-
 import { BlogCard } from '@/components/BlogCard';
 
 const Home: PrismPage = () => {

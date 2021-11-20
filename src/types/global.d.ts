@@ -60,4 +60,9 @@ declare global {
         name: string;
         description: string;
     }
+
+    interface ApiResponse<T> {
+        data?: T;
+        message?: string;
+    }
 }
