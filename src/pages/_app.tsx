@@ -12,8 +12,8 @@ import '../styles/imports.css';
 import '../styles/variables.css';
 
 const layouts = {
-    common: dynamic(import('../Layouts/CommonLayout')),
-    article: dynamic(import('../Layouts/ArticleLayout')),
+    common: dynamic(import('../layouts/CommonLayout')),
+    article: dynamic(import('../layouts/ArticleLayout')),
 };
 
 function Prism({ Component, pageProps }: PrismAppProps) {

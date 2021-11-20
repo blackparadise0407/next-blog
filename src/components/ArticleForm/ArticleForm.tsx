@@ -1,20 +1,34 @@
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import Select from 'react-select';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import Select, { OptionProps } from 'react-select';
 import {
     AiOutlineCopy,
     AiOutlineFileDone,
     AiOutlinePicture,
 } from 'react-icons/ai';
+
 import { Button } from '../Button';
 import { Input } from '../Input';
 import { Logo } from '../Logo';
 import tipsData from './tips.json';
+import useSWR from 'swr';
+import fetcher from 'utils/fetcher';
+import { tagsApi } from 'clientApis';
+import { debounce } from 'lodash';
+import { useToast } from '@/contexts/toast';
 
 type ArticleFormProps = {
     value?: string;
 };
 
+type TagOpts = {
+    label: string;
+    value: string;
+};
+
 export default function ArticleForm({}: ArticleFormProps) {
+    const { enqueue } = useToast();
+    const [inputValue, setInputValue] = useState('');
+    const [tagOpts, setTagOpts] = useState<Array<TagOpts>>([]);
     const [offSetTop, setOffSetTop] = useState<number>(90);
     const [tips, setTips] = useState<{ title: string; description: string }>(
         tipsData.title
@@ -26,10 +40,45 @@ export default function ArticleForm({}: ArticleFormProps) {
         setTips(tipsData.title);
     };
 
+    const handleTagsFocus = (e: any) => {
+        setOffSetTop(170);
+        setTips(tipsData.tags);
+    };
+
     const handleContentFocus = (e: ChangeEvent<HTMLTextAreaElement>) => {
         setOffSetTop(e.target.offsetTop);
         setTips(tipsData.content);
     };
+
+    const handleDebounceSearch = useCallback(
+        debounce(async (nextValue: string) => {
+            if (nextValue) {
+                const { data } = await tagsApi.getAll(nextValue);
+                console.log(data);
+            }
+        }, 500),
+        []
+    );
+    const handleInputChange = (v: string) => {
+        setInputValue(v);
+        handleDebounceSearch(v);
+    };
+
+    useEffect(() => {
+        async function eff() {
+            try {
+                const { data } = await tagsApi.getCommon();
+                if (!!data?.length) {
+                    const clone: TagOpts[] = data.map((tag) => ({
+                        label: tag.name,
+                        value: tag.uid,
+                    }));
+                    setTagOpts(clone);
+                }
+            } catch (_) {}
+        }
+        eff();
+    }, []);
 
     useEffect(() => {
         titleRef.current?.focus();
@@ -59,12 +108,12 @@ export default function ArticleForm({}: ArticleFormProps) {
                         />
                         <Select
                             className="text-xs"
+                            placeholder="Select up to 4 tags..."
+                            onFocus={handleTagsFocus}
+                            options={tagOpts}
+                            inputValue={inputValue}
+                            onInputChange={handleInputChange}
                             isMulti
-                            options={[
-                                { value: 'chocolate', label: 'Chocolate' },
-                                { value: 'strawberry', label: 'Strawberry' },
-                                { value: 'vanilla', label: 'Vanilla' },
-                            ]}
                         />
                     </div>
                     <div className="px-5 md:px-10 py-2 bg-gray-50 flex items-center space-x-4">
