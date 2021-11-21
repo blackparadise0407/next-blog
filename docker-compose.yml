@@ -1,0 +1,13 @@
+version: "3.9"
+
+services:
+  mongo:
+    image: mongo
+    volumes:
+      - "/mongo-entrypoint/:/docker-entrypoint-initdb.d/"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=kyle
+      - MONGO_INITDB_ROOT_PASSWORD=040799
+    ports:
+      - "27017:27017"
+    command: mongod

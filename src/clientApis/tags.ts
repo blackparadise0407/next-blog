@@ -4,8 +4,10 @@ const tagsApi = {
     getAll: (q: string) => {
         return request<ApiResponse<ITag[]>>('get', '/api/tags', { q });
     },
-    getCommon: () => {
-        return request<ApiResponse<ITag[]>>('get', '/api/tags/common');
+    getCommon: (
+        query: { q?: string; type?: 'common' } = { q: '', type: 'common' }
+    ) => {
+        return request<ApiResponse<ITag[]>>('get', '/api/tags', { query });
     },
     create: (data: ITag) => {
         return request<ApiResponse<ITag>>('post', '/api/tags', data);

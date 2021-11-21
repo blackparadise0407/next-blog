@@ -1,5 +1,5 @@
 import { AxiosRequestConfig, Method } from 'axios';
-import fetcher from 'utils/fetcher';
+import fetcher from '@/lib/fetcher';
 
 async function request<T>(method: Method, url: string, data?: any) {
     const config: AxiosRequestConfig = {

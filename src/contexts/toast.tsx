@@ -26,7 +26,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
         setItems((prev) => {
             const clone = [...prev];
             clone.push({
-                uid: new Date().getTime().toString(),
+                id: new Date().getTime().toString(),
                 title: opts.title,
                 description: message,
                 variant: opts.variant,
@@ -37,7 +37,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
 
     const _handleDeleteToast = useCallback((uid: string) => {
         setItems((prev) => {
-            const foundIndex = prev.findIndex((i) => i.uid === uid);
+            const foundIndex = prev.findIndex((i) => i.id === uid);
             if (foundIndex > -1) {
                 const clone = [...prev];
                 clone.splice(foundIndex, 1);
@@ -53,7 +53,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
                     {items.map((i) => (
                         <ToastItem
                             autoClose={4000}
-                            key={i.uid}
+                            key={i.id}
                             data={i}
                             onDelete={_handleDeleteToast}
                         />

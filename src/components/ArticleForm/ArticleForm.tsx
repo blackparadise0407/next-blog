@@ -1,20 +1,19 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
-import Select, { OptionProps } from 'react-select';
+import Select from 'react-select';
 import {
     AiOutlineCopy,
     AiOutlineFileDone,
     AiOutlinePicture,
 } from 'react-icons/ai';
+import { debounce } from 'lodash';
+
+import tagsApi from '@/clientApis/tags';
+import { useToast } from '@/contexts/toast';
 
 import { Button } from '../Button';
 import { Input } from '../Input';
 import { Logo } from '../Logo';
 import tipsData from './tips.json';
-import useSWR from 'swr';
-import fetcher from 'utils/fetcher';
-import { tagsApi } from 'clientApis';
-import { debounce } from 'lodash';
-import { useToast } from '@/contexts/toast';
 
 type ArticleFormProps = {
     value?: string;
@@ -28,6 +27,7 @@ type TagOpts = {
 export default function ArticleForm({}: ArticleFormProps) {
     const { enqueue } = useToast();
     const [inputValue, setInputValue] = useState('');
+    const [searchedOpts, setSearchedOpts] = useState<Array<TagOpts>>([]);
     const [tagOpts, setTagOpts] = useState<Array<TagOpts>>([]);
     const [offSetTop, setOffSetTop] = useState<number>(90);
     const [tips, setTips] = useState<{ title: string; description: string }>(
@@ -54,7 +54,13 @@ export default function ArticleForm({}: ArticleFormProps) {
         debounce(async (nextValue: string) => {
             if (nextValue) {
                 const { data } = await tagsApi.getAll(nextValue);
-                console.log(data);
+                if (!!data?.length) {
+                    const clone: TagOpts[] = data.map((tag) => ({
+                        label: tag.name,
+                        value: tag.id,
+                    }));
+                    setSearchedOpts(clone);
+                }
             }
         }, 500),
         []
@@ -62,6 +68,9 @@ export default function ArticleForm({}: ArticleFormProps) {
     const handleInputChange = (v: string) => {
         setInputValue(v);
         handleDebounceSearch(v);
+        if (!v) {
+            setSearchedOpts([]);
+        }
     };
 
     useEffect(() => {
@@ -71,7 +80,7 @@ export default function ArticleForm({}: ArticleFormProps) {
                 if (!!data?.length) {
                     const clone: TagOpts[] = data.map((tag) => ({
                         label: tag.name,
-                        value: tag.uid,
+                        value: tag.id,
                     }));
                     setTagOpts(clone);
                 }
@@ -110,7 +119,9 @@ export default function ArticleForm({}: ArticleFormProps) {
                             className="text-xs"
                             placeholder="Select up to 4 tags..."
                             onFocus={handleTagsFocus}
-                            options={tagOpts}
+                            options={
+                                !!searchedOpts.length ? searchedOpts : tagOpts
+                            }
                             inputValue={inputValue}
                             onInputChange={handleInputChange}
                             isMulti

@@ -1,8 +1,11 @@
 import { User } from '@firebase/auth';
+import { Document, Mongoose } from 'mongoose';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
 
 declare global {
+    var mongoose: any;
+
     type PrismAppProps = Omit<AppProps, 'Component'> & {
         Component: PrismPage;
     };
@@ -40,25 +43,24 @@ declare global {
     }
 
     interface IToastItem extends Omit<IToastOptions, 'title'> {
-        uid: string;
+        id: string;
         title?: string;
         description: string;
     }
 
-    interface IBlog {
-        uid: string;
+    interface IBlog extends Document {
         thumbnail: string;
         title: string;
         tags: Array<ITag>;
         path: string;
         likeCount: number;
         commentCount: number;
+        content: string;
     }
-
-    interface ITag {
-        uid: string;
+    interface ITag extends Document {
         name: string;
         description: string;
+        used_score: number;
     }
 
     interface ApiResponse<T> {

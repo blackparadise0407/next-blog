@@ -20,7 +20,10 @@
             "@/pages/*": ["pages/*"],
             "@/hooks/*": ["hooks/*"],
             "@/contexts/*": ["contexts/*"],
-            "@/HOCs/*": ["HOCs/*"]
+            "@/HOCs/*": ["HOCs/*"],
+            "@/lib/*": ["lib/*"],
+            "@/models/*": ["models/*"],
+            "@/clientApis/*": ["clientApis/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

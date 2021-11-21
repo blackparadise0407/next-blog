@@ -1,15 +1,13 @@
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import clsx from 'clsx';
 import { User } from '@firebase/auth';
 import { get } from 'lodash';
 
-import firebase from 'utils/firebase';
-import { useAuthContext } from 'contexts/auth';
-import { Avatar } from 'components/Avatar';
-import { Button } from 'components/Button';
-import { Input } from 'components/Input';
+import { useAuthContext } from '@/contexts/auth';
+import { Avatar } from '@/components/Avatar';
+import { Button } from '@/components/Button';
+import { Input } from '@/components/Input';
 
 import styles from './styles.module.css';
 import { Logo } from '../Logo';

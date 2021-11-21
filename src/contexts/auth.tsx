@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import {
     createContext,
     ReactNode,
@@ -16,10 +17,9 @@ import {
 } from 'firebase/auth';
 import Cookies from 'js-cookie';
 
-import firebase from 'utils/firebase';
-import { google, github } from 'utils/providers';
+import firebase from '@/lib/firebase';
+import { google, github } from '@/lib/providers';
 import { useToast } from './toast';
-import { useRouter } from 'next/router';
 
 const initialState: IAuthContext = {
     loading: false,

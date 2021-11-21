@@ -73,7 +73,7 @@ const getClassFromVariant = (
 };
 
 function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
-    const { uid, title = '', description, variant = 'info' } = data;
+    const { id: uid, title = '', description, variant = 'info' } = data;
     const [classN, setClassN] = useState('animate-slide-in');
 
     useEffect(() => {
