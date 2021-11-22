@@ -26,7 +26,18 @@ const BlogSchema = new mongoose.Schema<IBlog>(
     {
         timestamps: true,
         versionKey: false,
+        toJSON: {
+            transform: (_, ret) => {
+                delete ret._id;
+                return ret;
+            },
+            virtuals: true,
+        },
     }
 );
 
-export default model('Blog', BlogSchema);
+BlogSchema.virtual('id').get(function (this: { _id: any }) {
+    return this._id.toHexString();
+});
+
+export default mongoose.models.Blog || mongoose.model('Blog', BlogSchema);

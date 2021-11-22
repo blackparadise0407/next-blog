@@ -23,7 +23,8 @@
             "@/HOCs/*": ["HOCs/*"],
             "@/lib/*": ["lib/*"],
             "@/models/*": ["models/*"],
-            "@/clientApis/*": ["clientApis/*"]
+            "@/clientApis/*": ["clientApis/*"],
+            "@/middlewares/*": ["middlewares/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
