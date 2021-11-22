@@ -1,10 +1,10 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import { useRouter } from 'next/router';
 import { useCallback } from 'react';
 import clsx from 'clsx';
-import { User } from '@firebase/auth';
+import { UserProfile, useUser } from '@auth0/nextjs-auth0';
 import { get } from 'lodash';
 
-import { useAuthContext } from '@/contexts/auth';
 import { Avatar } from '@/components/Avatar';
 import { Button } from '@/components/Button';
 import { Input } from '@/components/Input';
@@ -14,17 +14,14 @@ import { Logo } from '../Logo';
 
 type Props = {};
 
-function _renderUser(
-    user: User | undefined,
-    handleSignOut: () => void
-): JSX.Element | null {
+function _renderUser(user: UserProfile | undefined): JSX.Element | null {
     if (!user) return null;
     return (
         <div>
             <div className="relative">
                 <Avatar
                     className={styles.avatar}
-                    url={get(user, 'photoURL', '')}
+                    url={get(user, 'picture', '')}
                     size={35}
                 />
                 <div
@@ -36,7 +33,7 @@ function _renderUser(
                     <ul className="space-y-2 text-xs md:text-sm">
                         <div className="flex flex-col px-4 py-2 transition-colors hover:bg-gray-100 cursor-pointer rounded-md">
                             <span className="text-sm truncate text-black font-medium">
-                                {get(user, 'displayName', '')}
+                                {get(user, 'name', '')}
                             </span>
                             <span className="text-xs truncate text-gray-400">
                                 {user?.email}
@@ -53,11 +50,10 @@ function _renderUser(
                             Setting
                         </li>
                         <hr />
-                        <li
-                            className="hover:bg-gray-100 transition-colors hover:text-blue-500 rounded-md cursor-pointer px-4 py-2.5"
-                            onClick={handleSignOut}
-                        >
-                            Sign Out
+                        <li className="hover:bg-gray-100 transition-colors hover:text-blue-500 rounded-md cursor-pointer px-4 py-2.5">
+                            <a href="/api/auth/logout">
+                                <div>Sign Out</div>
+                            </a>
                         </li>
                     </ul>
                 </div>
@@ -68,7 +64,8 @@ function _renderUser(
 
 export default function Header({}: Props) {
     const router = useRouter();
-    const { isAuth, user, handleSignOut } = useAuthContext();
+    // const { isAuth, user, handleSignOut } = useAuthContext();
+    const { user } = useUser();
 
     const handleGoToLogin = useCallback(() => {
         router.push('/enter');
@@ -103,12 +100,12 @@ export default function Header({}: Props) {
             />
             <div className="flex-grow"></div>
             <ul className="space-x-2 xl:space-x-5 flex">
-                {isAuth ? (
+                {!!user ? (
                     <div className="flex items-center space-x-5">
                         <Button onClick={handleGoToCreateBlog} type="primary">
                             Create Post
                         </Button>
-                        {_renderUser(user, handleSignOut)}
+                        {_renderUser(user)}
                     </div>
                 ) : (
                     <>

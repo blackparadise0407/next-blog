@@ -1,10 +1,8 @@
-import type { AppProps } from 'next/app';
-import { NextPage } from 'next';
 import dynamic from 'next/dynamic';
+import { UserProvider } from '@auth0/nextjs-auth0';
 
 import { AuthProvider } from '@/contexts/auth';
 import { ToastProvider } from '@/contexts/toast';
-import withAuth from '@/HOCs/withAuth';
 
 import 'tailwindcss/tailwind.css';
 import '../styles/globals.css';
@@ -21,18 +19,20 @@ function Prism({ Component, pageProps }: PrismAppProps) {
         ? layouts[Component.layout]
         : ({ children }: any) => <>{children}</>;
 
-    const ProtectedComponent = Component.isPrivate
-        ? withAuth(Component)
-        : Component;
+    // const ProtectedComponent = Component.isPrivate
+    //     ? withAuth(Component)
+    //     : Component;
 
     return (
-        <ToastProvider>
-            <AuthProvider>
-                <Layout>
-                    <ProtectedComponent {...pageProps} />
-                </Layout>
-            </AuthProvider>
-        </ToastProvider>
+        <UserProvider>
+            <ToastProvider>
+                <AuthProvider>
+                    <Layout>
+                        <Component {...pageProps} />
+                    </Layout>
+                </AuthProvider>
+            </ToastProvider>
+        </UserProvider>
     );
 }
 

@@ -1,3 +1,4 @@
+import { UserProfile, WithPageAuthRequiredProps } from '@auth0/nextjs-auth0';
 import { User } from '@firebase/auth';
 import { Document, Mongoose } from 'mongoose';
 import { NextPage } from 'next';
@@ -29,6 +30,8 @@ declare global {
         handleSendPasswordResetEmail: (email: string) => void;
         handleSignOut: () => void;
     }
+
+    interface UserDoc extends Document, UserProfile {}
 
     type ToastVariant = 'info' | 'success' | 'warning' | 'error';
 

@@ -2,6 +2,7 @@ import qs from 'query-string';
 import axios from 'axios';
 
 const fetcher = axios.create({
+    baseURL: 'http://localhost:3000',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -18,7 +19,7 @@ fetcher.interceptors.response.use(
         return resp;
     },
     (err) => {
-        throw new Error(err.message);
+        return Promise.reject(new Error(err.message));
     }
 );
 

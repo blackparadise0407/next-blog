@@ -1,20 +1,19 @@
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
-import { BackdropLoader } from '@/components/BackdropLoader';
-import { useAuthContext } from '@/contexts/auth';
+import { getSession, useUser } from '@auth0/nextjs-auth0';
 import useDidMountEffect from '@/hooks/useDidMountEffect';
 
 const withAuth = (Component: PrismPage) => {
     const Auth = (props: any) => {
         const router = useRouter();
-        const { isAuth } = useAuthContext();
+        const { user, isLoading } = useUser();
+        // useDidMountEffect(() => {
+        //     if (!user) router.replace('/');
+        //     // eslint-disable-next-line react-hooks/exhaustive-deps
+        // }, [user]);
 
-        useDidMountEffect(() => {
-            if (!isAuth) router.replace('/');
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [isAuth]);
-
-        if (!isAuth) return <BackdropLoader />;
+        // if (isLoading || !user) return null;
         return <Component {...props} />;
     };
 

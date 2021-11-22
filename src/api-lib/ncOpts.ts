@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { NextConnect, Options } from 'next-connect';
+import { Options } from 'next-connect';
 
 const ncOpts: Options<NextApiRequest, NextApiResponse> = {
     onError: (err, _, res) => {

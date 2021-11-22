@@ -1,22 +1,22 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { AiOutlineGithub, AiOutlineGoogle } from 'react-icons/ai';
 
-import { useAuthContext } from 'contexts/auth';
 import { Button } from '@/components/Button';
 import { Label } from '@/components/Label';
 import { Input } from '@/components/Input';
 import { useToast } from '@/contexts/toast';
+import { useUser } from '@auth0/nextjs-auth0';
 
 type Props = {};
 
 const EnterPage: PrismPage = ({}: Props) => {
     const router = useRouter();
     const { state } = router.query;
-    const { isAuth, loading, handleEmailPasswordSignIn, handleExternalSignIn } =
-        useAuthContext();
+    const { user, isLoading } = useUser();
     const { enqueue } = useToast();
 
     const { values, handleChange, handleSubmit } = useFormik({
@@ -24,25 +24,15 @@ const EnterPage: PrismPage = ({}: Props) => {
             username: '',
             password: '',
         },
-        onSubmit: (values) => {
-            const { username, password } = values;
-            if (!username || !password) {
-                enqueue('Username and password are required!', {
-                    variant: 'error',
-                    title: 'Error',
-                });
-            } else {
-                handleEmailPasswordSignIn({ username, password });
-            }
-        },
+        onSubmit: (values) => {},
     });
 
     useEffect(() => {
-        if (isAuth) {
+        if (!!user) {
             router.replace('/');
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAuth]);
+    }, [user]);
 
     return (
         <div className="flex items-center justify-center">
@@ -57,7 +47,6 @@ const EnterPage: PrismPage = ({}: Props) => {
                         icon={<AiOutlineGoogle size={20} />}
                         type="primary"
                         className="!bg-black hover:!bg-gray-800"
-                        onClick={() => handleExternalSignIn('google')}
                     >
                         Sign in with your Google account
                     </Button>
@@ -67,7 +56,6 @@ const EnterPage: PrismPage = ({}: Props) => {
                         size="large"
                         icon={<AiOutlineGithub size={20} />}
                         type="primary"
-                        onClick={() => handleExternalSignIn('github')}
                     >
                         Sign in with your Github account
                     </Button>
@@ -81,7 +69,7 @@ const EnterPage: PrismPage = ({}: Props) => {
                 </div>
                 {state !== 'new-user' && (
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <Label name="Username">
+                        {/* <Label name="Username">
                             <Input
                                 id="username"
                                 name="username"
@@ -98,15 +86,17 @@ const EnterPage: PrismPage = ({}: Props) => {
                                 value={values.password}
                                 type="password"
                             />
-                        </Label>
+                        </Label> */}
                         <Button
-                            loading={loading}
-                            htmlType="submit"
+                            loading={isLoading}
+                            htmlType="button"
                             block
                             size="large"
                             type="primary"
                         >
-                            Continue
+                            <a href="/api/auth/login">
+                                Continue with your account
+                            </a>
                         </Button>
                         <p className="text-xs text-blue-600 text-center">
                             <Link href="/users/password/new">

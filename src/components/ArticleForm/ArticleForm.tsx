@@ -29,7 +29,7 @@ export default function ArticleForm({}: ArticleFormProps) {
     const [inputValue, setInputValue] = useState('');
     const [searchedOpts, setSearchedOpts] = useState<Array<TagOpts>>([]);
     const [tagOpts, setTagOpts] = useState<Array<TagOpts>>([]);
-    const [offSetTop, setOffSetTop] = useState<number>(90);
+    const [offSetTop, setOffSetTop] = useState<number>(50);
     const [tips, setTips] = useState<{ title: string; description: string }>(
         tipsData.title
     );

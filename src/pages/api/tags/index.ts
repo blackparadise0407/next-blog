@@ -2,13 +2,13 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 
 import Tags from '@/models/tags';
 import dbConnect from '@/lib/database';
-import handler from '@/middlewares/handler';
+import nextConnect from 'next-connect';
+import ncOpts from 'api-lib/ncOpts';
+import { TagServices } from 'api-lib/db';
 
-export default handler.get('/api/tags', (req, res) => {
-    res.send('ok');
-});
+const handler = nextConnect(ncOpts);
 
-// async function handler(
+// export default async function handler(
 //     req: NextApiRequest,
 //     res: NextApiResponse<ApiResponse<any>>
 // ) {
@@ -43,3 +43,16 @@ export default handler.get('/api/tags', (req, res) => {
 //         }
 //     }
 // }
+
+handler.get(async (req, res) => {
+    const { q = '', type } = req.query;
+    await dbConnect();
+    if (type === 'common') {
+        const data = await TagServices.getTopTags(q as string, type);
+        return res.send({ data, message: 'OK' });
+    }
+    const data = await TagServices.getAllTags(q as string);
+    return res.send({ data, message: 'OK' });
+});
+
+export default handler;

@@ -23,14 +23,19 @@ const _renderIconFromVariant = (variant: ToastVariant): JSX.Element | null => {
             );
         case 'success':
             return (
-                <AiOutlineCheckCircle className="mr-2 text-white" size={25} />
+                <AiOutlineCheckCircle
+                    className="mr-2 text-green-500"
+                    size={25}
+                />
             );
         case 'warning':
-            return <AiOutlineWarning className="mr-2 text-white" size={25} />;
+            return (
+                <AiOutlineWarning className="mr-2 text-yellow-500" size={25} />
+            );
         case 'error':
             return (
                 <AiOutlineCloseCircle
-                    className="self-center mr-2 text-white"
+                    className="self-center mr-2 text-red-500"
                     size={25}
                 />
             );
@@ -41,34 +46,34 @@ const _renderIconFromVariant = (variant: ToastVariant): JSX.Element | null => {
 
 const getClassFromVariant = (
     variant: ToastVariant
-): { body: string; title: string; description: string } => {
+): { extra: string; title: string; description: string } => {
     switch (variant) {
         case 'info':
             return {
-                body: 'bg-white',
+                extra: 'bg-blue-500',
                 title: 'text-blue-500',
                 description: 'text-blue-500',
             };
         case 'success':
             return {
-                body: 'bg-green-500',
-                title: 'text-white',
-                description: 'text-white',
+                extra: 'bg-green-500',
+                title: 'text-green-500',
+                description: 'text-green-500',
             };
         case 'error':
             return {
-                body: 'bg-red-500',
-                title: 'text-white',
-                description: 'text-white',
+                extra: 'bg-red-500',
+                title: 'text-red-500',
+                description: 'text-red-500',
             };
         case 'warning':
             return {
-                body: 'bg-yellow-500',
-                title: 'text-white',
-                description: 'text-white',
+                extra: 'bg-yellow-500',
+                title: 'text-yellow-500',
+                description: 'text-yellow-500',
             };
         default:
-            return { body: '', title: '', description: '' };
+            return { extra: '', title: '', description: '' };
     }
 };
 
@@ -108,9 +113,8 @@ function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
         <div
             key={uid}
             className={clsx(
-                'relative flex items-center pl-4 pr-6 py-3 shadow-lg rounded-md max-w-xs w-72',
-                classN && classN,
-                getClassFromVariant(variant).body
+                'relative flex items-center bg-white pl-4 pr-6 py-3 shadow-lg rounded-md max-w-xs w-72 overflow-hidden',
+                classN && classN
             )}
         >
             {icon ? icon : _renderIconFromVariant(variant)}
@@ -143,6 +147,12 @@ function ToastItem({ data, autoClose = 3000, icon, onDelete }: ToastItemProps) {
             >
                 <AiOutlineClose />
             </span>
+            <div
+                className={clsx(
+                    'absolute top-0 left-0 bottom-0 w-1',
+                    getClassFromVariant(variant).extra
+                )}
+            ></div>
         </div>
     );
 }

@@ -4,7 +4,7 @@ services:
   mongo:
     image: mongo
     volumes:
-      - "/mongo-entrypoint/:/docker-entrypoint-initdb.d/"
+      - "./data:/data/db"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=kyle
       - MONGO_INITDB_ROOT_PASSWORD=040799
