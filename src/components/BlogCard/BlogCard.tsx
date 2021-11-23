@@ -53,7 +53,7 @@ export default function BlogCard({ data }: BlogCardProps) {
                         </span>
                     </div>
                     <div className="flex-grow"></div>
-                    <Button size="middle" type="secondary">
+                    <Button size="small" type="secondary">
                         Save
                     </Button>
                 </div>

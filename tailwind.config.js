@@ -4,6 +4,33 @@ module.exports = {
     darkMode: false, // or 'media' or 'class'
     theme: {
         extend: {
+            typography: {
+                DEFAULT: {
+                    css: {
+                        color: '#FFF',
+                        a: {
+                            color: '#4798C5',
+                            '&:hover': {
+                                color: '#2c5282',
+                            },
+                        },
+                        h1: {
+                            color: '#FFF',
+                        },
+                        h2: {
+                            color: '#FFF',
+                        },
+                        h3: {
+                            color: '#FFF',
+                        },
+                        h4: { color: '#FFF' },
+                        em: { color: '#FFF' },
+                        strong: { color: '#FFF' },
+                        blockquote: { color: '#FFF' },
+                        code: { backgroundColor: '#1A1E22', color: '#FFF' },
+                    },
+                },
+            },
             keyframes: {
                 appear: {
                     '0%': { opacity: 0 },

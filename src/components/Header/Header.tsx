@@ -109,11 +109,11 @@ export default function Header({}: Props) {
                     </div>
                 ) : (
                     <>
-                        <Button onClick={handleGoToLogin} type="ghost">
-                            Login
-                        </Button>
-                        <Button onClick={handleGoToSignUp} type="primary">
-                            Create account
+                        {/* <Button type="ghost">
+                            <a href="/api/auth/login">Login</a>
+                        </Button> */}
+                        <Button type="primary">
+                            <a href="/api/auth/login">Sign in</a>
                         </Button>
                     </>
                 )}

@@ -1,8 +1,13 @@
-import { UserProfile, WithPageAuthRequiredProps } from '@auth0/nextjs-auth0';
+import {
+    UserProfile,
+    WithPageAuthRequired,
+    WithPageAuthRequiredProps,
+} from '@auth0/nextjs-auth0';
 import { User } from '@firebase/auth';
 import { Document, Mongoose } from 'mongoose';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
+import { FC } from 'react';
 
 declare global {
     var mongoose: any;

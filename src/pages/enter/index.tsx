@@ -45,6 +45,14 @@ const EnterPage: PrismPage = ({}: Props) => {
                         block
                         size="large"
                         icon={<AiOutlineGoogle size={20} />}
+                        type="danger"
+                    >
+                        Sign in with your Google account
+                    </Button>
+                    <Button
+                        block
+                        size="large"
+                        icon={<AiOutlineGoogle size={20} />}
                         type="primary"
                         className="!bg-black hover:!bg-gray-800"
                     >

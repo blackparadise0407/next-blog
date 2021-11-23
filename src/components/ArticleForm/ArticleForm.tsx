@@ -1,11 +1,12 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 import Select from 'react-select';
 import {
+    AiOutlineClose,
     AiOutlineCopy,
     AiOutlineFileDone,
     AiOutlinePicture,
 } from 'react-icons/ai';
-import { debounce } from 'lodash';
+import { debounce, isArray } from 'lodash';
 
 import tagsApi from '@/clientApis/tags';
 import { useToast } from '@/contexts/toast';
@@ -14,18 +15,34 @@ import { Button } from '../Button';
 import { Input } from '../Input';
 import { Logo } from '../Logo';
 import tipsData from './tips.json';
+import { ArticleValue, TagOpts } from '.';
+import ArticlePreview from './ArticlePreview';
 
 type ArticleFormProps = {
-    value?: string;
+    value?: ArticleValue;
+    onChange?: (v: ArticleValue) => void;
 };
 
-type TagOpts = {
-    label: string;
-    value: string;
+const _getTagsOpts = (data: ITag[]) => {
+    if (!!data?.length) {
+        const clone: TagOpts[] = data.map((tag) => ({
+            label: tag.name,
+            value: tag.id,
+        }));
+        return clone;
+    }
+    return [];
 };
 
-export default function ArticleForm({}: ArticleFormProps) {
+export default function ArticleForm({ value, onChange }: ArticleFormProps) {
     const { enqueue } = useToast();
+    const [innerValue, setInnerValue] = useState<ArticleValue>({
+        title: '',
+        tags: [],
+        content: '',
+        cover_photo: '',
+    });
+    const [preview, setPreview] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [searchedOpts, setSearchedOpts] = useState<Array<TagOpts>>([]);
     const [tagOpts, setTagOpts] = useState<Array<TagOpts>>([]);
@@ -54,18 +71,14 @@ export default function ArticleForm({}: ArticleFormProps) {
         debounce(async (nextValue: string) => {
             if (nextValue) {
                 const { data } = await tagsApi.getAll(nextValue);
-                if (!!data?.length) {
-                    const clone: TagOpts[] = data.map((tag) => ({
-                        label: tag.name,
-                        value: tag.id,
-                    }));
-                    setSearchedOpts(clone);
-                }
+                const opts = _getTagsOpts(data);
+                setSearchedOpts(opts);
             }
         }, 500),
         []
     );
-    const handleInputChange = (v: string) => {
+
+    const handleSearchInputChange = (v: string) => {
         setInputValue(v);
         handleDebounceSearch(v);
         if (!v) {
@@ -73,17 +86,29 @@ export default function ArticleForm({}: ArticleFormProps) {
         }
     };
 
+    const handleFieldsOnChange = useCallback((e: any) => {
+        setInnerValue((prev) => {
+            if (isArray(e)) {
+                return { ...prev, tags: e };
+            }
+            return { ...prev, [e.target.name]: e.target.value };
+        });
+    }, []);
+
+    const handlePreview = () => {
+        setPreview(true);
+    };
+
+    const handleEdit = () => {
+        setPreview(false);
+    };
+
     useEffect(() => {
         async function eff() {
             try {
                 const { data } = await tagsApi.getCommon();
-                if (!!data?.length) {
-                    const clone: TagOpts[] = data.map((tag) => ({
-                        label: tag.name,
-                        value: tag.id,
-                    }));
-                    setTagOpts(clone);
-                }
+                const opts = _getTagsOpts(data);
+                setTagOpts(opts);
             } catch (_) {}
         }
         eff();
@@ -93,87 +118,121 @@ export default function ArticleForm({}: ArticleFormProps) {
         titleRef.current?.focus();
     }, []);
 
+    useEffect(() => {
+        onChange?.(innerValue);
+        console.log(innerValue);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [innerValue]);
+
     return (
-        <>
+        <div className="relative grid grid-cols-10 gap-x-0 md:gap-x-10 bg-gray-100 h-screen px-2 md:px-20 xl:px-48 overflow-y-hidden">
             <div className="col-span-10 md:col-span-7">
                 <div className="w-full flex py-4 items-center">
                     <Logo />
+                    <span className="text-sm font-medium ml-2">
+                        {preview ? 'Preview' : 'Create post'}
+                    </span>
                     <div className="flex-grow"></div>
                     <div className="flex space-x-2">
-                        <Button type="primary">Edit</Button>
-                        <Button type="default">Preview</Button>
-                    </div>
-                </div>
-                <div
-                    className="flex flex-col bg-white w-full rounded-md border border-gray-300"
-                    style={{ height: 'calc(100vh - 11rem)' }}
-                >
-                    <div className="px-5 md:px-10 pb-2 md:pb-4 pt-6 md:pt-10">
-                        <input
-                            ref={titleRef}
-                            className="outline-none font-black text-xl md:text-4xl !leading-6 mb-2 w-full bg-transparent placeholder-gray-400"
-                            placeholder="New post title here..."
-                            onFocus={handleTitleFocus}
-                        />
-                        <Select
-                            className="text-xs"
-                            placeholder="Select up to 4 tags..."
-                            onFocus={handleTagsFocus}
-                            options={
-                                !!searchedOpts.length ? searchedOpts : tagOpts
-                            }
-                            inputValue={inputValue}
-                            onInputChange={handleInputChange}
-                            isMulti
-                        />
-                    </div>
-                    <div className="px-5 md:px-10 py-2 bg-gray-50 flex items-center space-x-4">
-                        <Button
-                            icon={<AiOutlinePicture size={20} />}
-                            type="ghost"
-                        >
-                            Upload image
+                        <Button type="primary" onClick={handleEdit}>
+                            Edit
                         </Button>
-                        {false && (
-                            <>
-                                <Input className="w-80" readOnly />
-                                <Button
-                                    icon={
-                                        true ? (
-                                            <AiOutlineCopy size={20} />
-                                        ) : (
-                                            <AiOutlineFileDone size={20} />
-                                        )
-                                    }
-                                    type="ghost"
-                                >
-                                    Copy
-                                </Button>
-                            </>
-                        )}
+                        <Button type="default" onClick={handlePreview}>
+                            Preview
+                        </Button>
+                        <Button
+                            type="ghost"
+                            className="!bg-gray-100 hover:!bg-gray-200 md:absolute md:top-2 md:right-2"
+                            icon={<AiOutlineClose strokeWidth={30} size={16} />}
+                        />
                     </div>
-                    <textarea
-                        className="outline-none flex-grow resize-none font-normal text-xs md:text-sm px-5 md:px-10 py-4 w-full bg-transparent text-justify placeholder-gray-400"
-                        placeholder="Write your post content here..."
-                        onFocus={handleContentFocus}
-                    />
                 </div>
+                {preview ? (
+                    <ArticlePreview value={innerValue} />
+                ) : (
+                    <div
+                        className="flex flex-col bg-white w-full rounded-md border border-gray-300"
+                        style={{ height: 'calc(100vh - 11rem)' }}
+                    >
+                        <div className="px-5 md:px-10 pb-2 md:pb-4 pt-6 md:pt-10">
+                            <input
+                                ref={titleRef}
+                                name="title"
+                                className="outline-none font-black text-xl md:text-4xl !leading-6 mb-2 w-full bg-transparent placeholder-gray-400"
+                                placeholder="New post title here..."
+                                value={innerValue?.title}
+                                onChange={handleFieldsOnChange}
+                                onFocus={handleTitleFocus}
+                            />
+                            <Select
+                                className="text-xs"
+                                placeholder="Select up to 4 tags..."
+                                onFocus={handleTagsFocus}
+                                options={
+                                    !!searchedOpts.length
+                                        ? searchedOpts
+                                        : tagOpts
+                                }
+                                value={innerValue.tags}
+                                inputValue={inputValue}
+                                onInputChange={handleSearchInputChange}
+                                onChange={handleFieldsOnChange}
+                                isMulti
+                            />
+                        </div>
+                        <div className="px-5 md:px-10 py-2 bg-gray-50 flex items-center space-x-4">
+                            <Button
+                                icon={<AiOutlinePicture size={20} />}
+                                type="ghost"
+                            >
+                                Upload image
+                            </Button>
+                            {false && (
+                                <>
+                                    <Input className="w-80" readOnly />
+                                    <Button
+                                        icon={
+                                            true ? (
+                                                <AiOutlineCopy size={20} />
+                                            ) : (
+                                                <AiOutlineFileDone size={20} />
+                                            )
+                                        }
+                                        type="ghost"
+                                    >
+                                        Copy
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                        <textarea
+                            name="content"
+                            className="outline-none flex-grow resize-none font-normal text-xs md:text-sm px-5 md:px-10 py-4 w-full bg-transparent text-justify placeholder-gray-400"
+                            placeholder="Write your post content here..."
+                            value={innerValue?.content}
+                            onChange={handleFieldsOnChange}
+                            onFocus={handleContentFocus}
+                        />
+                    </div>
+                )}
                 <div className="flex space-x-5 mt-5">
                     <Button type="primary">Publish</Button>
                     <Button type="ghost">Save draft</Button>
                 </div>
             </div>
-            <div
-                className="hidden sticky top-5 bottom-5 md:flex flex-col col-span-3 transition-transform"
-                style={{
-                    transform: `translateY(${offSetTop - 20}px)`,
-                }}
-            >
-                <span className="font-semibold text-lg">{tips.title}</span>
-                <span className="text-xs md:text-sm text-gray-500">
-                    {tips.description}
-                </span>
-            </div>
-        </>
+            {!preview && (
+                <div
+                    className="hidden sticky top-5 bottom-5 md:flex flex-col col-span-3 transition-transform"
+                    style={{
+                        transform: `translateY(${offSetTop - 20}px)`,
+                    }}
+                >
+                    <span className="font-semibold text-lg">{tips.title}</span>
+                    <span className="text-xs md:text-sm text-gray-500">
+                        {tips.description}
+                    </span>
+                </div>
+            )}
+        </div>
     );
 }
