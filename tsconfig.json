@@ -25,7 +25,9 @@
             "@/lib/*": ["lib/*"],
             "@/models/*": ["models/*"],
             "@/clientApis/*": ["clientApis/*"],
-            "@/middlewares/*": ["middlewares/*"]
+            "@/middlewares/*": ["middlewares/*"],
+            "@/api-lib/*": ["api-lib/*"],
+            "@/shared/*": ["shared/*"]
         }
     },
     "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

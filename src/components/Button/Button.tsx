@@ -38,11 +38,11 @@ const getColorFromType = (type: ButtonType) => {
 const getButtonSize = (size: ButtonSize) => {
     switch (size) {
         case 'small':
-            return 'text-xs sm:text-sm px-2 py-1';
+            return 'text-xs sm:text-sm px-2.5 py-1';
         case 'middle':
-            return 'text-xs sm:text-sm px-3 py-2';
+            return 'text-xs sm:text-sm !leading-5 px-3.5 py-2';
         case 'large':
-            return 'text-xs sm:text-sm md:text-base px-4 py-2.5';
+            return 'text-xs sm:text-sm md:text-base px-4 py-3';
         default:
             return '';
     }

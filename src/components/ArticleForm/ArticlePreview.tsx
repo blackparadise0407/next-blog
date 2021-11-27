@@ -40,9 +40,7 @@ export default function ArticlePreview({ value }: ArticlePreviewProps) {
                     </span>
                 ))}
             </div>
-            <ReactMarkdown className="" skipHtml>
-                {value?.content}
-            </ReactMarkdown>
+            <ReactMarkdown className="h-auto">{value?.content}</ReactMarkdown>
         </div>
     );
 }

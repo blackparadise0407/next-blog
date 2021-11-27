@@ -1,8 +1,11 @@
-import mongoose, { model, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const BlogSchema = new mongoose.Schema<IBlog>(
     {
-        thumbnail: String,
+        thumbnail: {
+            type: Schema.Types.ObjectId,
+            ref: 'Attachment',
+        },
         title: {
             type: String,
         },
@@ -16,8 +19,8 @@ const BlogSchema = new mongoose.Schema<IBlog>(
             type: String,
             required: true,
         },
-        likeCount: { type: Number, default: 0 },
-        commentCount: { type: Number, default: 0 },
+        like_count: { type: Number, default: 0 },
+        comment_count: { type: Number, default: 0 },
         content: {
             type: String,
             required: true,
@@ -40,4 +43,5 @@ BlogSchema.virtual('id').get(function (this: { _id: any }) {
     return this._id.toHexString();
 });
 
-export default mongoose.models.Blog || mongoose.model('Blog', BlogSchema);
+export default mongoose.models.Blog ||
+    mongoose.model<IBlog>('Blog', BlogSchema);

@@ -1,4 +1,4 @@
-import { request } from 'clientApis';
+import { request } from 'client-apis';
 
 const tagsApi = {
     getAll: (q: string) => {

@@ -3,7 +3,6 @@ import {
     WithPageAuthRequired,
     WithPageAuthRequiredProps,
 } from '@auth0/nextjs-auth0';
-import { User } from '@firebase/auth';
 import { Document, Mongoose } from 'mongoose';
 import { NextPage } from 'next';
 import { AppProps } from 'next/app';
@@ -20,6 +19,8 @@ declare global {
         layout?: 'common' | 'article' | undefined;
         isPrivate?: boolean | undefined;
     };
+
+    type ImageType = 'avatar' | 'article';
     interface IAuthContext {
         user: User | undefined;
         isAuth: boolean;
@@ -57,18 +58,31 @@ declare global {
     }
 
     interface IBlog extends Document {
-        thumbnail: string;
+        thumbnail: IAttachment;
         title: string;
         tags: Array<ITag>;
         path: string;
-        likeCount: number;
-        commentCount: number;
+        like_count: number;
+        comment_count: number;
         content: string;
     }
     interface ITag extends Document {
         name: string;
         description: string;
         used_score: number;
+    }
+
+    interface IUserProfile extends Document {
+        work: string;
+        education: string;
+        phone_number: string;
+        user_credential: string;
+        avatar: IAttachment;
+    }
+
+    interface IAttachment extends Document {
+        type: ImageType;
+        url: string;
     }
 
     interface ApiResponse<T> {

@@ -8,7 +8,7 @@ import {
 } from 'react-icons/ai';
 import { debounce, isArray } from 'lodash';
 
-import tagsApi from '@/clientApis/tags';
+import tagsApi from 'client-apis/tags';
 import { useToast } from '@/contexts/toast';
 
 import { Button } from '../Button';

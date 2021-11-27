@@ -1,3 +1,5 @@
+const plugin = require('tailwindcss/plugin');
+
 module.exports = {
     mode: 'jit',
     purge: ['./public/**/*.html', './src/**/*.{js,jsx,ts,tsx,vue}'],
@@ -78,5 +80,34 @@ module.exports = {
     variants: {
         extend: {},
     },
-    plugins: [],
+    plugins: [
+        plugin(function ({ addBase, theme }) {
+            addBase({
+                h1: {
+                    fontSize: theme('fontSize.3xl'),
+                    fontWeight: theme('fontWeight.medium'),
+                },
+                h2: {
+                    fontSize: theme('fontSize.2xl'),
+                    fontWeight: theme('fontWeight.medium'),
+                },
+                h3: {
+                    fontSize: theme('fontSize.xl'),
+                    fontWeight: theme('fontWeight.medium'),
+                },
+                h4: {
+                    fontSize: theme('fontSize.lg'),
+                    fontWeight: theme('fontWeight.medium'),
+                },
+                h5: {
+                    fontSize: theme('fontSize.base'),
+                    fontWeight: theme('fontWeight.medium'),
+                },
+                h6: {
+                    fontSize: theme('fontSize.sm'),
+                    fontWeight: theme('fontWeight.medium'),
+                },
+            });
+        }),
+    ],
 };
