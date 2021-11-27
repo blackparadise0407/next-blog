@@ -24,7 +24,7 @@
             "@/HOCs/*": ["HOCs/*"],
             "@/lib/*": ["lib/*"],
             "@/models/*": ["models/*"],
-            "@/clientApis/*": ["clientApis/*"],
+            "@/client-apis/*": ["client-apis/*"],
             "@/middlewares/*": ["middlewares/*"],
             "@/api-lib/*": ["api-lib/*"],
             "@/shared/*": ["shared/*"]

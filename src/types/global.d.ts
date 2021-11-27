@@ -20,6 +20,11 @@ declare global {
         isPrivate?: boolean | undefined;
     };
 
+    type PrismPageWithAuth = FC<WithPageAuthRequiredProps> & {
+        isPrivate?: boolean | undefined;
+        layout?: 'common' | 'article' | undefined;
+    };
+
     type ImageType = 'avatar' | 'article';
     interface IAuthContext {
         user: User | undefined;
@@ -85,8 +90,10 @@ declare global {
         url: string;
     }
 
+    type ResponseMessage = 'ok';
+
     interface ApiResponse<T> {
         data?: T;
-        message?: string;
+        message?: ResponseMessage;
     }
 }

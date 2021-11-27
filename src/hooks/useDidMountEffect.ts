@@ -8,7 +8,7 @@ export default function useDidMountEffect(fn: EffectCallback, deps: any[]) {
             const unmount = fn();
             return () => {
                 mounted.current = false;
-                unmount?.();
+                unmount && unmount();
             };
         } else mounted.current = true;
         // eslint-disable-next-line react-hooks/exhaustive-deps

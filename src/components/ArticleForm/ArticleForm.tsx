@@ -8,15 +8,15 @@ import {
 } from 'react-icons/ai';
 import { debounce, isArray } from 'lodash';
 
-import tagsApi from 'client-apis/tags';
+import tagsApi from '@/client-apis/tags';
 import { useToast } from '@/contexts/toast';
 
+import ArticlePreview from './ArticlePreview';
 import { Button } from '../Button';
 import { Input } from '../Input';
 import { Logo } from '../Logo';
 import tipsData from './tips.json';
 import { ArticleValue, TagOpts } from '.';
-import ArticlePreview from './ArticlePreview';
 
 type ArticleFormProps = {
     value?: ArticleValue;
@@ -67,6 +67,7 @@ export default function ArticleForm({ value, onChange }: ArticleFormProps) {
         setTips(tipsData.content);
     };
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleDebounceSearch = useCallback(
         debounce(async (nextValue: string) => {
             if (nextValue) {

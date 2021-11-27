@@ -3,7 +3,7 @@ import { Button } from '@/components/Button';
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { AiOutlineClose } from 'react-icons/ai';
 
-const NewBlogPage = withPageAuthRequired(() => {
+const NewBlogPage: PrismPageWithAuth = withPageAuthRequired(() => {
     return (
         <>
             <div className="absolute top-0 right-0">
@@ -14,7 +14,6 @@ const NewBlogPage = withPageAuthRequired(() => {
     );
 });
 
-// NewBlogPage.layout = 'article';
 NewBlogPage.isPrivate = true;
 
 export default NewBlogPage;

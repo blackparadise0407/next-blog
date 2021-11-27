@@ -13,10 +13,10 @@ export default async function handler(
     if (method === 'GET') {
         const { q = '', type } = req.query;
         const pattern = new RegExp(q as string, 'i');
-        try {
-            return res.send({ data: {}, message: 'OK' });
-        } catch (e) {
-            return res.status(403).json({ message: 'Insufficient permission' });
-        }
+        // try {
+        //     return res.send({ data: {}, message: 'OK' });
+        // } catch (e) {
+        //     return res.status(403).json({ message: 'Insufficient permission' });
+        // }
     }
 }
