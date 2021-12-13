@@ -1,5 +1,6 @@
 import qs from 'query-string';
 import axios from 'axios';
+import { get } from 'lodash';
 
 const fetcher = axios.create({
     baseURL: 'http://localhost:3000',
@@ -19,7 +20,9 @@ fetcher.interceptors.response.use(
         return resp;
     },
     (err) => {
-        return Promise.reject(new Error(err.message));
+        const errorMessage =
+            get(err, ['response', 'data', 'message']) || err.message;
+        return Promise.reject(errorMessage);
     }
 );
 

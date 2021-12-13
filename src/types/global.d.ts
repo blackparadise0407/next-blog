@@ -65,11 +65,13 @@ declare global {
     interface IBlog extends Document {
         thumbnail: IAttachment;
         title: string;
-        tags: Array<ITag>;
+        tags: Array<string> | Array<ITag>;
         path: string;
         like_count: number;
         comment_count: number;
         content: string;
+        user_id: string;
+        cover_photo: string;
     }
     interface ITag extends Document {
         name: string;
@@ -90,10 +92,14 @@ declare global {
         url: string;
     }
 
-    type ResponseMessage = 'ok';
+    type ResponseMessage = 'ok' | string;
 
     interface ApiResponse<T> {
         data?: T;
         message?: ResponseMessage;
+    }
+
+    interface ErrorCb {
+        (error: string): void;
     }
 }

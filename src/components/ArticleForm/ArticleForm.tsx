@@ -9,7 +9,6 @@ import {
 import { debounce, isArray } from 'lodash';
 
 import tagsApi from '@/client-apis/tags';
-import { useToast } from '@/contexts/toast';
 
 import ArticlePreview from './ArticlePreview';
 import { Button } from '../Button';
@@ -20,7 +19,7 @@ import { ArticleValue, TagOpts } from '.';
 
 type ArticleFormProps = {
     value?: ArticleValue;
-    onChange?: (v: ArticleValue) => void;
+    onPublish?: (v: ArticleValue, cb: ErrorCb) => void;
 };
 
 const _getTagsOpts = (data: ITag[]) => {
@@ -34,14 +33,17 @@ const _getTagsOpts = (data: ITag[]) => {
     return [];
 };
 
-export default function ArticleForm({ value, onChange }: ArticleFormProps) {
-    const { enqueue } = useToast();
-    const [innerValue, setInnerValue] = useState<ArticleValue>({
+export default function ArticleForm({
+    value = {
         title: '',
         tags: [],
         content: '',
         cover_photo: '',
-    });
+    },
+    onPublish,
+}: ArticleFormProps) {
+    const [isLoading, setIsLoading] = useState(false);
+    const [innerValue, setInnerValue] = useState<ArticleValue>(value);
     const [preview, setPreview] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [searchedOpts, setSearchedOpts] = useState<Array<TagOpts>>([]);
@@ -104,6 +106,26 @@ export default function ArticleForm({ value, onChange }: ArticleFormProps) {
         setPreview(false);
     };
 
+    const handlePublish = () => {
+        setIsLoading(true);
+        onPublish?.(innerValue, (err) => {
+            if (err) {
+            }
+            reInitState();
+        });
+    };
+
+    const reInitState = useCallback(() => {
+        setIsLoading(false);
+        setInnerValue({
+            tags: [],
+            title: '',
+            content: '',
+            cover_photo: '',
+        });
+        setInputValue('');
+    }, []);
+
     useEffect(() => {
         async function eff() {
             try {
@@ -120,10 +142,10 @@ export default function ArticleForm({ value, onChange }: ArticleFormProps) {
     }, []);
 
     useEffect(() => {
-        onChange?.(innerValue);
-        console.log(innerValue);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [innerValue]);
+        return () => {
+            reInitState();
+        };
+    }, []);
 
     return (
         <div className="relative grid grid-cols-10 gap-x-0 md:gap-x-10 bg-gray-100 h-screen px-2 md:px-20 xl:px-48 overflow-y-hidden">
@@ -135,10 +157,16 @@ export default function ArticleForm({ value, onChange }: ArticleFormProps) {
                     </span>
                     <div className="flex-grow"></div>
                     <div className="flex space-x-2">
-                        <Button type="primary" onClick={handleEdit}>
+                        <Button
+                            type={!preview ? 'primary' : 'default'}
+                            onClick={handleEdit}
+                        >
                             Edit
                         </Button>
-                        <Button type="default" onClick={handlePreview}>
+                        <Button
+                            type={preview ? 'primary' : 'default'}
+                            onClick={handlePreview}
+                        >
                             Preview
                         </Button>
                         <Button
@@ -217,7 +245,13 @@ export default function ArticleForm({ value, onChange }: ArticleFormProps) {
                     </div>
                 )}
                 <div className="flex space-x-5 mt-5">
-                    <Button type="primary">Publish</Button>
+                    <Button
+                        loading={isLoading}
+                        type="primary"
+                        onClick={handlePublish}
+                    >
+                        Publish
+                    </Button>
                     <Button type="ghost">Save draft</Button>
                 </div>
             </div>

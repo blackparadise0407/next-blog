@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { ReactNode, useCallback, memo } from 'react';
+import { ReactNode, useCallback, memo, ReactElement, HTMLProps } from 'react';
 import { AiOutlineLoading } from 'react-icons/ai';
 
 type ButtonType = 'primary' | 'secondary' | 'danger' | 'default' | 'ghost';
@@ -7,15 +7,12 @@ type ButtonType = 'primary' | 'secondary' | 'danger' | 'default' | 'ghost';
 type ButtonSize = 'large' | 'small' | 'middle';
 
 type ButtonProps = {
-    className?: string;
     type?: ButtonType;
-    children?: ReactNode | JSX.Element;
     icon?: ReactNode | JSX.Element;
     block?: boolean;
     size?: ButtonSize;
     loading?: boolean;
     htmlType?: 'button' | 'submit' | 'reset';
-    onClick?: () => void;
 };
 
 const getColorFromType = (type: ButtonType) => {
@@ -50,7 +47,6 @@ const getButtonSize = (size: ButtonSize) => {
 
 function Button({
     className = '',
-    onClick,
     type = 'default',
     children,
     icon,
@@ -58,16 +54,11 @@ function Button({
     size = 'middle',
     htmlType = 'button',
     block = false,
-}: ButtonProps) {
-    const handleOnClick = useCallback(() => {
-        onClick?.();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
+    ...rest
+}: ButtonProps & Omit<HTMLProps<HTMLButtonElement>, 'size'>) {
     return (
         <button
             type={htmlType}
-            onClick={handleOnClick}
             className={clsx(
                 getButtonSize(size),
                 getColorFromType(type),
@@ -76,6 +67,7 @@ function Button({
                 block && 'w-full',
                 loading && '!opacity-90 pointer-events-none'
             )}
+            {...rest}
         >
             <div className="flex-grow"></div>
             {icon && !loading && (

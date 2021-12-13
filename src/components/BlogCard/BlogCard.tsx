@@ -17,7 +17,7 @@ export default function BlogCard({ data }: BlogCardProps) {
                             John Doe
                         </span>
                     </p>
-                    <span className="text-xs transition-colors cursor-pointer text-gray-400 hover:text-gray-800">
+                    <span className="text-xs transition-colors text-gray-400">
                         Nov 20 (2 days ago)
                     </span>
                 </div>

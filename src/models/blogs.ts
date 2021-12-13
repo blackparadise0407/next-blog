@@ -8,13 +8,20 @@ const BlogSchema = new mongoose.Schema<IBlog>(
         },
         title: {
             type: String,
+            required: true,
         },
-        tags: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: 'tags',
-            },
-        ],
+        tags: {
+            type: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: 'tags',
+                },
+            ],
+            validate: [
+                tagsValidator,
+                '{PATH} must have at least 1 tag and less than 4 tags',
+            ],
+        },
         path: {
             type: String,
             required: true,
@@ -22,6 +29,10 @@ const BlogSchema = new mongoose.Schema<IBlog>(
         like_count: { type: Number, default: 0 },
         comment_count: { type: Number, default: 0 },
         content: {
+            type: String,
+            required: true,
+        },
+        user_id: {
             type: String,
             required: true,
         },
@@ -38,6 +49,10 @@ const BlogSchema = new mongoose.Schema<IBlog>(
         },
     }
 );
+
+function tagsValidator(val: any) {
+    return val.length >= 1 && val.length <= 4;
+}
 
 BlogSchema.virtual('id').get(function (this: { _id: any }) {
     return this._id.toHexString();

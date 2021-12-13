@@ -3,6 +3,7 @@ import nextConnect from 'next-connect';
 import ncOpts from '@/api-lib/ncOpts';
 import { TagServices } from '@/api-lib/services';
 import dbConnect from '@/lib/database';
+import { auth } from '@/shared/middlewares/auth';
 
 const handler = nextConnect(ncOpts);
 
@@ -15,6 +16,10 @@ handler.get(async (req, res) => {
     }
     const data = await TagServices.getAllTags(q as string);
     return res.send({ data, message: 'OK' });
+});
+
+handler.use(auth).post((req, res) => {
+    res.send('OK');
 });
 
 export default handler;

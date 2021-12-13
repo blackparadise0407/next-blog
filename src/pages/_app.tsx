@@ -2,22 +2,8 @@ import dynamic from 'next/dynamic';
 import { UserProvider } from '@auth0/nextjs-auth0';
 import { useEffect } from 'react';
 
-import { AuthProvider } from '@/contexts/auth';
 import { ToastProvider } from '@/contexts/toast';
-// import Prismjs from 'prismjs';
-// import 'prismjs/components/prism-python.min';
-// import 'prismjs/components/prism-java.min';
-// import 'prismjs/components/prism-javascript.min';
-// import 'prismjs/components/prism-go.min';
-// import 'prismjs/components/prism-yaml.min';
-// import 'prismjs/components/prism-typescript.min';
-// import 'prismjs/components/prism-css.min';
-// import 'prismjs/components/prism-markup.min';
-// import 'prismjs/components/prism-powershell.min';
-// import 'prismjs/components/prism-jsx.min';
-// import 'prismjs/components/prism-tsx.min';
-// import 'prismjs/components/prism-json.min';
-// import 'prismjs/components/prism-jsx.min';
+
 import '../styles/globals.css';
 import '../styles/imports.css';
 import '../styles/variables.css';
@@ -45,11 +31,9 @@ function Prism({ Component, pageProps }: PrismAppProps) {
     return (
         <UserProvider>
             <ToastProvider>
-                <AuthProvider>
-                    <Layout>
-                        <Component {...pageProps} />
-                    </Layout>
-                </AuthProvider>
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
             </ToastProvider>
         </UserProvider>
     );

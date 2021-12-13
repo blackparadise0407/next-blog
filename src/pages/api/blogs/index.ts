@@ -1,22 +1,27 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-
-import Blogs from '@/models/blogs';
+import ncOpts from '@/api-lib/ncOpts';
+import { BlogServices } from '@/api-lib/services';
 import dbConnect from '@/lib/database';
+import { AdvancedResponse } from '@/shared/AdvancedResponse';
+import { auth } from '@/shared/middlewares/auth';
+import nextConnect from 'next-connect';
 
-export default async function handler(
-    req: NextApiRequest,
-    res: NextApiResponse<ApiResponse<any>>
-) {
+const handler = nextConnect(ncOpts);
+handler.use(auth);
+handler.get(async (req, res) => {
+    return res.send(new AdvancedResponse({ data: {} }));
+});
+
+handler.post(async (req, res) => {
     await dbConnect();
-    const { method } = req;
+    const { user } = req.session;
+    const blog = req.body as IBlog;
+    const savedBlog = await BlogServices.create(user, blog);
+    return res.send(
+        new AdvancedResponse({
+            data: savedBlog,
+            message: 'Create new blog successfully',
+        })
+    );
+});
 
-    if (method === 'GET') {
-        const { q = '', type } = req.query;
-        const pattern = new RegExp(q as string, 'i');
-        // try {
-        //     return res.send({ data: {}, message: 'OK' });
-        // } catch (e) {
-        //     return res.status(403).json({ message: 'Insufficient permission' });
-        // }
-    }
-}
+export default handler;
