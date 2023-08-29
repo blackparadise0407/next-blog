@@ -1,3 +1,5 @@
+import React from "react";
+
 import { Post } from "../lib/api";
 
 interface PostLineProps {
@@ -5,23 +7,26 @@ interface PostLineProps {
 }
 
 export default function PostLine({ post }: PostLineProps) {
-  const date = new Date((post.date ?? 0) * 1000);
+  const date = new Date(post.date!);
 
   return (
-    <>
-      <tr key={post.slug}>
-        <td>-rw-r--r--</td>
-        <td>{post.author}</td>
-        <td>{post.content?.replaceAll(" ", "").length}</td>
-        <td>{date.toLocaleString("en-US", { month: "short" })}</td>
-        <td>{date.getDate()}</td>
-        <td>{date.getFullYear()}</td>
-        <td>
-          <a className="link" href={post.slug}>
-            {post.title}
-          </a>
-        </td>
-      </tr>
-    </>
+    <div className="break-all space-x-3">
+      <span className="inline-block w-20">-rw-r--r--</span>
+      <span className="inline-block w-60">{post.author}</span>
+      <span className="inline-block w-10">
+        {post.content?.replaceAll(" ", "").length}
+      </span>
+      <span className="inline-block w-8">
+        {date.toLocaleString("en-US", { month: "short" })}
+      </span>
+      <span className="inline-block w-6">{date.getDate()}</span>
+      <span className="inline-block w-10">{date.getFullYear()}</span>
+      <span>
+        <a className="link" href={post.slug}>
+          {post.title}
+        </a>{" "}
+        {post.pinned && "📌"}
+      </span>
+    </div>
   );
 }

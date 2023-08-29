@@ -2,6 +2,7 @@ import { remark } from "remark";
 import remarkHtml from "remark-html";
 
 import { getAllPosts, getPostBySlug } from "@/app/lib/api";
+import ScrollPercentage from "./ScrollPercentage";
 import Client from "./client";
 
 export const dynamicParams = false;
@@ -32,7 +33,7 @@ export default async function Page({
       <article className="mx-auto space-y-3">
         <div className="flex gap-5 justify-between">
           <div className="flex-grow basis-0 hidden md:block">
-            {new Date((post.date ?? 0) * 1000).toISOString()}
+            {new Date(post.date!).toDateString()}
           </div>
           <h1 className="text-center">{slug}</h1>
           <div className="flex-grow basis-0 text-right hidden md:block">
@@ -50,15 +51,16 @@ export default async function Page({
         <div>
           <p className="uppercase font-semibold">content</p>
           <div
-            className="pl-20 prose text-white max-w-full"
+            className="pl-20 prose prose-code:text-white prose-code:bg-gray-600 prose-a:text-white prose-blockquote:text-white text-white prose-headings:text-white max-w-full"
             dangerouslySetInnerHTML={{
               __html: content,
             }}
           ></div>
         </div>
+        <p className="text-center">From Kyle with ♡</p>
       </article>
-      <p className="sticky bottom-0 bg-white text-black px-3 w-fit">
-        Manual page line 1 (press q or backspace or click{" "}
+      <p className="fixed left-0 bottom-0 bg-white text-black px-3 w-fit">
+        Manual page (<ScrollPercentage />) (press q or backspace or click{" "}
         <a className="underline" href="/">
           here
         </a>{" "}
