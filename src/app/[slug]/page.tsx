@@ -78,7 +78,7 @@ export async function generateStaticParams() {
   }));
 }
 
-export async function getPostContent(rawStr: string) {
+async function getPostContent(rawStr: string) {
   const file = await remark().use(remarkHtml).process(rawStr);
   return String(file);
 }
