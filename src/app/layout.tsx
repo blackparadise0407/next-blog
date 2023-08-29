@@ -1,10 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Nunito } from "next/font/google";
-import Header from "./layouts/Header";
+import { Ubuntu_Mono } from "next/font/google";
 
-const nunito = Nunito({
+const ubuntuMono = Ubuntu_Mono({
   subsets: ["latin"],
+  weight: ["400", "700"],
 });
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="bg-black text-white">
-      <body className={nunito.className}>{children}</body>
+      <body className={ubuntuMono.className}>{children}</body>
     </html>
   );
 }

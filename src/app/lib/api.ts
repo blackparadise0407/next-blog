@@ -9,6 +9,7 @@ export interface Post {
   slug: string;
   content: string;
   archive: boolean;
+  description: string;
 }
 
 interface PostFilters extends Partial<Post> {}

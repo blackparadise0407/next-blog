@@ -1,6 +1,12 @@
+import os from "os";
+
 import { getAllPosts } from "./lib/api";
+import Prompt from "./components/Prompt";
+import PostLine from "./components/PostLine";
 
 export default async function Home() {
+  const { type, platform, memUsage, cpus, version, release, machine } =
+    getSystemInfo();
   const posts = await getAllPosts({
     select: ["title", "slug", "date", "content", "author", "archive"],
     filters: {
@@ -11,10 +17,11 @@ export default async function Home() {
     <main>
       <p>
         Welcome to{" "}
-        <a className="underline" href="">
+        <a className="link font-bold" href="/">
           Elykp dev blog
         </a>{" "}
-        20.04 LTS (GNU/Linux 5.10.60.1-microsoft-standard-WSL2 x86_64)
+        {version} ({type} {release}-{platform} {machine})
+        {/* 20.04 LTS (GNU/Linux 5.10.60.1-microsoft-standard-WSL2 x86_64) */}
       </p>
       <div className="p-3">
         <table>
@@ -22,7 +29,10 @@ export default async function Home() {
             <tr>
               <td>* Linkedin:</td>
               <td>
-                <a href="https://www.linkedin.com/in/khoa-pham-a61a471a5">
+                <a
+                  className="link"
+                  href="https://www.linkedin.com/in/khoa-pham-a61a471a5"
+                >
                   https://www.linkedin.com/in/khoa-pham-a61a471a5
                 </a>
               </td>
@@ -30,7 +40,7 @@ export default async function Home() {
             <tr>
               <td>* Github:</td>
               <td>
-                <a href="https://github.com/blackparadise0407">
+                <a className="link" href="https://github.com/blackparadise0407">
                   https://github.com/blackparadise0407
                 </a>
               </td>
@@ -38,7 +48,7 @@ export default async function Home() {
             <tr>
               <td>* Contact:</td>
               <td>
-                <a href="mailto:phamddangkhoa@gmail.com">
+                <a className="link" href="mailto:phamddangkhoa@gmail.com">
                   phamddangkhoa@gmail.com
                 </a>
               </td>
@@ -61,7 +71,7 @@ export default async function Home() {
               </tr>
               <tr>
                 <td>Memory usage:</td>
-                <td>6%</td>
+                <td>{(memUsage * 100).toFixed(2)}%</td>
               </tr>
               <tr>
                 <td>Swap usage:</td>
@@ -73,7 +83,7 @@ export default async function Home() {
             <tbody>
               <tr>
                 <td>Processes:</td>
-                <td>8</td>
+                <td>{cpus}</td>
               </tr>
               <tr>
                 <td>Users logged in:</td>
@@ -93,40 +103,30 @@ export default async function Home() {
         <p>The list of available updates is more than a week old.</p>
         <p>To check for new updates run: sudo apt update</p>
       </div>
-      <p>
-        <span className="text-lime-500">kyle@DESKTOP-PUD1VAS</span>:
-        <span className="text-blue-600">~</span>$ ls -al
-      </p>
+      <Prompt>ls -al</Prompt>
       <p>total {posts.length}</p>
       <table>
         <tbody>
-          {posts.map((post) => {
-            const date = new Date((post.date ?? 0) * 1000);
-            return (
-              <>
-                <tr key={post.slug}>
-                  <td>-rw-r--r--</td>
-                  <td>{post.author}</td>
-                  <td>{post.content?.replaceAll(" ", "").length}</td>
-                  <td>{date.toLocaleString("en-US", { month: "short" })}</td>
-                  <td>{date.getDate()}</td>
-                  <td>{date.getFullYear()}</td>
-                  <td>
-                    <a className="hover:text-blue-500" href={post.slug}>
-                      {post.title}
-                    </a>
-                  </td>
-                </tr>
-              </>
-            );
-          })}
+          {posts.map((post) => (
+            <PostLine key={post.slug} post={post} />
+          ))}
         </tbody>
       </table>
-      <p>
-        <span className="text-lime-500">kyle@DESKTOP-PUD1VAS</span>:
-        <span className="text-blue-600">~</span>${" "}
+      <Prompt>
         <span className="animate-blink">|</span>
-      </p>
+      </Prompt>
     </main>
   );
+}
+
+export function getSystemInfo() {
+  return {
+    memUsage: 1 - os.freemem() / os.totalmem(),
+    cpus: os.cpus().length,
+    platform: os.platform(),
+    release: os.release(),
+    version: os.version(),
+    machine: os.machine(),
+    type: os.type(),
+  };
 }

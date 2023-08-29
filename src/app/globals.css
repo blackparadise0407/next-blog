@@ -1,5 +1,12 @@
 @tailwind base;
 @tailwind components;
+
+@layer components {
+  .link {
+    @apply hover:bg-blue-600;
+  }
+}
+
 @tailwind utilities;
 
 table tr td {
