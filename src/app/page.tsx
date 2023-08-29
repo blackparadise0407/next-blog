@@ -1,8 +1,8 @@
 import os from "os";
 
-import { getAllPosts } from "./lib/api";
-import Prompt from "./components/Prompt";
 import PostLine from "./components/PostLine";
+import Prompt from "./components/Prompt";
+import { getAllPosts } from "./lib/api";
 
 export default async function Home() {
   const { type, platform, memUsage, cpus, version, release, machine } =
@@ -27,7 +27,7 @@ export default async function Home() {
         <table>
           <tbody>
             <tr>
-              <td>* Linkedin:</td>
+              <td className="whitespace-pre">* Linkedin:</td>
               <td>
                 <a
                   className="link"
@@ -38,7 +38,7 @@ export default async function Home() {
               </td>
             </tr>
             <tr>
-              <td>* Github:</td>
+              <td className="whitespace-pre">* Github:</td>
               <td>
                 <a className="link" href="https://github.com/blackparadise0407">
                   https://github.com/blackparadise0407
@@ -46,7 +46,7 @@ export default async function Home() {
               </td>
             </tr>
             <tr>
-              <td>* Contact:</td>
+              <td className="whitespace-pre">* Contact:</td>
               <td>
                 <a className="link" href="mailto:phamddangkhoa@gmail.com">
                   phamddangkhoa@gmail.com
@@ -105,13 +105,9 @@ export default async function Home() {
       </div>
       <Prompt>ls -al</Prompt>
       <p>total {posts.length}</p>
-      <table>
-        <tbody>
-          {posts.map((post) => (
-            <PostLine key={post.slug} post={post} />
-          ))}
-        </tbody>
-      </table>
+      {posts.map((post) => (
+        <PostLine key={post.slug} post={post} />
+      ))}
       <Prompt>
         <span className="animate-blink">|</span>
       </Prompt>
@@ -126,7 +122,7 @@ function getSystemInfo() {
     platform: os.platform(),
     release: os.release(),
     version: os.version(),
-    machine: os.machine(),
+    machine: os.machine?.(),
     type: os.type(),
   };
 }

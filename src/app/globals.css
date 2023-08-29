@@ -10,5 +10,5 @@
 @tailwind utilities;
 
 table tr td {
-  @apply pr-5;
+  @apply pr-5 align-top break-all;
 }
