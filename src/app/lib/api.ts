@@ -1,6 +1,8 @@
-import path from "path";
 import fsPromise from "fs/promises";
 import matter from "gray-matter";
+import path from "path";
+
+import { partition } from "./utils";
 
 export interface Post {
   author: string;
@@ -10,6 +12,7 @@ export interface Post {
   content: string;
   archive: boolean;
   description: string;
+  pinned: boolean;
 }
 
 interface PostFilters extends Partial<Post> {}
@@ -40,6 +43,9 @@ export const getPostBySlug = async (
   const { data, content } = matter(fileContent);
 
   const post: Partial<Post> = {};
+
+  post.date = data.date;
+  post.pinned = data.pinned;
 
   select.forEach((field) => {
     if (field === "slug") {
@@ -72,5 +78,8 @@ export const getAllPosts: IGetAllPosts = async (q = {}) => {
       posts.push(post);
     }
   }
-  return posts;
+  const [pinnedPost, unpinnedPost] = partition(posts, (post) => !!post.pinned);
+  return pinnedPost
+    .sort((a, b) => b.date! - a.date!)
+    .concat(unpinnedPost.sort((a, b) => b.date! - a.date!));
 };
