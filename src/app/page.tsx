@@ -119,7 +119,7 @@ export default async function Home() {
   );
 }
 
-export function getSystemInfo() {
+function getSystemInfo() {
   return {
     memUsage: 1 - os.freemem() / os.totalmem(),
     cpus: os.cpus().length,
