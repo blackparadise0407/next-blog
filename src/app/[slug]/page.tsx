@@ -42,16 +42,16 @@ export default async function Page({
         </div>
         <div>
           <p className="uppercase font-semibold">title</p>
-          <p className="pl-20">{post.title}</p>
+          <p className="pl-10 md:pl-20">{post.title}</p>
         </div>
         <div>
           <p className="uppercase font-semibold">description</p>
-          <p className="pl-20">{post.description}</p>
+          <p className="pl-10 md:pl-20">{post.description}</p>
         </div>
         <div>
           <p className="uppercase font-semibold">content</p>
           <div
-            className="pl-20 prose prose-code:text-white prose-code:bg-gray-600 prose-a:text-white prose-blockquote:text-white text-white prose-headings:text-white max-w-full"
+            className="pl-10 md:pl-20 prose prose-code:text-white prose-code:bg-gray-600 prose-a:text-white prose-blockquote:text-white text-white prose-headings:text-white max-w-full"
             dangerouslySetInnerHTML={{
               __html: content,
             }}
