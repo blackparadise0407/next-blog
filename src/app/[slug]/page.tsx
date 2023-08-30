@@ -35,7 +35,7 @@ export default async function Page({
           <div className="flex-grow basis-0 hidden md:block">
             {new Date(post.date!).toDateString()}
           </div>
-          <h1 className="text-center">{slug}</h1>
+          <h1 className="text-center flex-grow md:flex-grow-0">{slug}</h1>
           <div className="flex-grow basis-0 text-right hidden md:block">
             {post.author}
           </div>
