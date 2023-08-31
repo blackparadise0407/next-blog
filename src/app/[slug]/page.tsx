@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import { remark } from "remark";
 import remarkHtml from "remark-html";
 
@@ -5,13 +6,46 @@ import { getAllPosts, getPostBySlug } from "@/app/lib/api";
 import ScrollPercentage from "./ScrollPercentage";
 import Client from "./client";
 
+type StaticParams = Awaited<ReturnType<typeof generateStaticParams>>[number];
+
+type Props = {
+  params: StaticParams;
+};
+
 export const dynamicParams = false;
 
-export default async function Page({
-  params,
-}: {
-  params: Awaited<ReturnType<typeof generateStaticParams>>[number];
-}) {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const slug = params.slug;
+  const post = await getPostBySlug(slug!, {}, [
+    "author",
+    "title",
+    "date",
+    "description",
+  ]);
+
+  if (!post) {
+    return {};
+  }
+
+  const url = `https://elykp.com/${slug}`;
+
+  return {
+    title: post.title,
+    description: post.description,
+    openGraph: {
+      title: post.title,
+      type: "article",
+      locale: "en",
+      authors: post.author,
+      url: url,
+    },
+    alternates: {
+      canonical: url,
+    },
+  };
+}
+
+export default async function Page({ params }: { params: StaticParams }) {
   const { slug } = params;
   const post = await getPostBySlug(slug!, {}, [
     "author",
