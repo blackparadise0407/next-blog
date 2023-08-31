@@ -64,7 +64,7 @@ export default async function Page({ params }: { params: StaticParams }) {
   return (
     <main>
       {<Client />}
-      <article className="mx-auto space-y-3">
+      <article className="mx-auto space-y-3 pb-6">
         <div className="flex gap-5 justify-between">
           <div className="flex-grow basis-0 hidden md:block">
             {new Date(post.date!).toDateString()}
@@ -85,13 +85,12 @@ export default async function Page({ params }: { params: StaticParams }) {
         <div>
           <p className="uppercase font-semibold">content</p>
           <div
-            className="pl-10 md:pl-20 prose prose-code:text-white prose-code:bg-gray-600 prose-a:text-white prose-blockquote:text-white text-white prose-headings:text-white max-w-full"
+            className="pl-10 md:pl-20 prose prose-blue prose-invert max-w-full"
             dangerouslySetInnerHTML={{
               __html: content,
             }}
           ></div>
         </div>
-        <p className="text-center">From Kyle with ♡</p>
       </article>
       <p className="fixed left-0 bottom-0 bg-white text-black px-3 w-fit">
         Manual page (<ScrollPercentage />) (press q or backspace or click{" "}
