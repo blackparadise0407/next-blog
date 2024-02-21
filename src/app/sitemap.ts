@@ -5,7 +5,7 @@ import { getAllPosts } from "./lib/api";
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const urls: MetadataRoute.Sitemap = [
     {
-      url: "https://elykp.com",
+      url: "https://elykp.info",
       lastModified: new Date(),
       priority: 1,
     },
@@ -17,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return urls.concat(
     posts.map((it) => ({
-      url: `https://elykp.com/${it.slug}`,
+      url: `https://elykp.info/${it.slug}`,
       lastModified: new Date(it.date!),
       priority: 0.8,
     }))
