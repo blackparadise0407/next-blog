@@ -18,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="bg-black text-white">
+    <html lang="en" className="bg-stone-950 text-white">
       <body className={ubuntuMono.className}>{children}</body>
     </html>
   );
