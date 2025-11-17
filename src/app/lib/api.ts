@@ -78,9 +78,9 @@ export const getAllPosts: IGetAllPosts = async (q = {}) => {
   }
 
   posts.sort((a, b) => {
-    if (b.pinned && !a.pinned) return -1;
-    if (!b.pinned && a.pinned) return 1;
-    return b.date! - a.date!;
+    if (a.pinned && !b.pinned) return -1;
+    if (!a.pinned && b.pinned) return 1;
+    return a.date! - b.date!;
   });
 
   return posts;
