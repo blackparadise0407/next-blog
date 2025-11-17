@@ -2,8 +2,6 @@ import fsPromise from "fs/promises";
 import matter from "gray-matter";
 import path from "path";
 
-import { partition } from "./utils";
-
 export interface Post {
   author: string;
   title: string;
@@ -78,8 +76,12 @@ export const getAllPosts: IGetAllPosts = async (q = {}) => {
       posts.push(post);
     }
   }
-  const [pinnedPost, unpinnedPost] = partition(posts, (post) => !!post.pinned);
-  return pinnedPost
-    .sort((a, b) => b.date! - a.date!)
-    .concat(unpinnedPost.sort((a, b) => b.date! - a.date!));
+
+  posts.sort((a, b) => {
+    if (b.pinned && !a.pinned) return -1;
+    if (!b.pinned && a.pinned) return 1;
+    return b.date! - a.date!;
+  });
+
+  return posts;
 };
