@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {};
   }
 
-  const url = `https://elykp.com/${slug}`;
+  const url = `https://elykp.vercel.app/${slug}`;
 
   return {
     title: post.title,
@@ -55,7 +55,7 @@ export default async function Page({ params }: { params: StaticParams }) {
     "description",
   ]);
 
-  const content = await getPostContent(post?.content ?? "");
+  const content = await processContent(post?.content ?? "");
 
   if (!post) {
     return null;
@@ -113,7 +113,7 @@ export async function generateStaticParams() {
   }));
 }
 
-async function getPostContent(rawStr: string) {
+async function processContent(rawStr: string) {
   const file = await remark().use(remarkHtml).process(rawStr);
   return String(file);
 }

@@ -33,7 +33,7 @@ export function getPostSlugs() {
 export const getPostBySlug = async (
   slug: string,
   filters: PostFilters = {},
-  select: Array<keyof Post> = []
+  select: Array<keyof Post> = [],
 ) => {
   const realSlug = slug.replace(/.md$/, "");
   const fullPath = path.join(postsDir, `${realSlug}.md`);
@@ -58,9 +58,22 @@ export const getPostBySlug = async (
     }
   });
 
+  if (data.url) {
+    const resp = await fetch(data.url);
+    if (resp.ok) {
+      try {
+        post.content = await resp.text();
+      } catch (error) {
+        console.error(
+          "Error fetching post content, falling back to original content",
+        );
+      }
+    }
+  }
+
   if (
     Object.keys(filters).every(
-      (key) => (post as any)[key] === (filters as any)[key]
+      (key) => (post as any)[key] === (filters as any)[key],
     )
   ) {
     return post;

@@ -1,4 +1,4 @@
 User-Agent: *
 Allow: /
 
-Sitemap: https://elykp.com/sitemap.xml
+Sitemap: https://elykp.vercel.app/sitemap.xml
